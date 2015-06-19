@@ -1,0 +1,43 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+
+<dom-module id="pluto-navbar">
+  <style>
+    :host {
+      display: block;
+      --paper-tabs-selection-bar-color: white;
+      --paper-tab-ink: transparent;
+
+    }
+    #navbar{
+      height: var(--navbar-height);
+      background-color: var(--primary-background);
+    }
+    #navbar div div{
+      justify-content: center;
+      color: white;
+      font-weight: 100;
+      font-size: 12px;
+      font-family: 'Roboto';
+    }
+    paper-tabs{
+      width: 100%;
+    }
+  </style>
+  <template>
+    <div id="navbar" class="horizontal layout fit">
+      <paper-tabs selected="{{tab}}" attr-for-selected="tab">
+        <template is="dom-repeat" items="[[tabs]]">
+          <paper-tab tab="[[item.name]]">
+            <iron-icon icon="[[item.icon]]" style$="[[_computeIconStyle(item, tab)]]"></iron-icon>
+          </paper-tab>
+        </template>
+      </paper-tabs>
+    </div>
+  </template>
+</dom-module>
+
+<script src="pluto-navbar.js"></script>

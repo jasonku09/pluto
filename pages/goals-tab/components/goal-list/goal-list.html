@@ -1,0 +1,92 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../../bower_components/paper-fab/paper-fab.html">
+<link rel="import" href="../../../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="goal-item.html">
+
+<dom-module id="goal-list">
+  <style>
+    #main{
+      background-color: #f1f1f1;
+      overflow: auto;
+      padding: 5px 15px 15px 15px;
+    }
+    paper-material{
+      background-color: white;
+    }
+    paper-item{
+      font-weight: 100;
+    }
+
+    .container{
+      margin-bottom: 15px;
+    }
+
+    .container > paper-material{
+      margin-top: 10px;
+    }
+    #savingsCollpase /deep/ paper-item{
+      font-size: 40px;
+    }
+    .money{
+      font-size: 25px;
+      color: green;
+      height: 60px;
+    }
+    paper-material{
+      transition: all .2s ease-in-out;
+    }
+    paper-material:active{
+      -webkit-transform: scale3d(0.95,0.95,1)
+    }
+  </style>
+  <template>
+
+    <!-- Main Section -->
+    <div class="fit" id="main">
+      <div class="container">
+
+        <!-- Savings Header -->
+        <paper-material elevation="1" id="savingsToolbar">
+          <paper-toolbar on-tap="_toggleSavingsPane" style$="[[_computeSavingsToolbarStyle(savingsCollapseOpen)]]">
+            <paper-item>Pluto Savings </paper-item>
+            <div class="flex"></div>
+            <iron-icon icon="[[_computeSavingsCollapseIcon(savingsCollapseOpen)]]"></iron-icon>
+          </paper-toolbar>
+        </paper-material>
+
+        <!-- Savings Pane -->
+        <iron-collapse id="savingsCollapse">
+          <paper-material elevation="1">
+            <paper-item class="vertical layout center center-justified money">
+              <div>$1709</div>
+            </paper-item>
+          </paper-material>
+        </iron-collapse>
+
+        <!-- Goals Header -->
+        <paper-material elevation="1" id="goalsToolbar">
+          <paper-toolbar on-tap="_toggleGoalsList" style$="[[_computeGoalsToolbarStyle(goalsCollapseOpen)]]">
+            <paper-item>My Goals</paper-item>
+            <div class="flex"></div>
+            <iron-icon icon="[[_computeGoalsCollapseIcon(goalsCollapseOpen)]]"></iron-icon>
+          </paper-toolbar>
+        </paper-material>
+
+        <!-- Goal List -->
+        <iron-collapse id="goalsCollapse">
+          <template id="goals-list" is="dom-repeat" items="[[goals]]">
+            <div class="goal-item">
+              <paper-material elevation="1">
+                <goal-item goal="[[item]]" on-tap="_onItemTap"></goal-item>
+              </paper-material>
+            </div>
+          </template>
+        </iron-collapse>
+
+        <!-- Add Fab -->
+        <paper-fab class="bottom-right" icon="add" mini="true"></paper-fab>
+      </div>
+    </div>
+  </template>
+</dom-module>
+<script src="goal-list.js"></script>

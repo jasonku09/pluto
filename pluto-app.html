@@ -1,0 +1,30 @@
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/wxy-router/wxy-router.html">
+<link rel="import" href="pages/home-page/home-page.html">
+
+<dom-module id="pluto-app">
+  <style>
+    :host {
+      --primary-background: -webkit-linear-gradient(left, rgba(56,210,187,1) 0%,rgba(102,201,198,1) 100%);;
+      --primary-color: #39d2bb;
+      --main-toolbar-height: 50px;
+      --scaffold-tool-color: #4690d0;
+      --accent-color: #62b8ed;
+    }
+  </style>
+  <template>
+    <wxy-router key="main">
+      <wxy-route path="/*tab"
+                 name="home-page"></wxy-route>
+      <wxy-route path="/"
+                 name="home-page"></wxy-route>
+    </wxy-router>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'pluto-app'
+
+  });
+</script>

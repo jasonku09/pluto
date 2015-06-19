@@ -1,0 +1,30 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../../../bower_components/paper-item/paper-item.html">
+
+<dom-module id="goal-details">
+  <style>
+    :host {
+      display: block;
+    }
+    #main{
+      margin: 5px;
+    }
+    paper-toolbar /deep/ #topBar, paper-toolbar{
+      background-color: white !important;
+      color: black;
+    }
+  </style>
+  <template>
+    <div id="main" class="vertical layout fit">
+      <paper-material>
+        <paper-toolbar>
+          <iron-icon icon="arrow-back" on-tap="_onBackTap"></iron-icon>
+          <div class="title">[[goal.name]]</div>
+        </paper-toolbar>
+      </paper-material>
+    </div>
+  </template>
+</dom-module>
+<script src="goal-details.js"></script>

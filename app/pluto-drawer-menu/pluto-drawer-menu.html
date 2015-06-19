@@ -1,0 +1,67 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../services/random-user-generator/random-user-generator.html">
+
+<dom-module id="pluto-drawer-menu">
+  <style>
+    .main{
+      background-color: #444D4C;
+      opacity: 0.98;
+    }
+    img{
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+    paper-icon-item{
+      color: white;
+      margin-top: 25px;
+      font-weight: 100;
+      text-transform: capitalize;
+    }
+    paper-item-body > div{
+      margin-left: 10px;
+    }
+    div[secondary]{
+      color: #b4b4b4;
+    }
+    paper-item{
+      color: #cfcfcf;
+      font-weight: 100;
+      margin-left: 10px;
+    }
+    paper-item:first-of-type{
+      margin-top: 25px;
+    }
+    paper-item:last-of-type{
+      margin-bottom: 25px;
+    }
+  </style>
+  <template>
+    <random-user-generator number-requested="1" on-complete="_onUserReturn" users="{{users}}"></random-user-generator>
+
+    <!-- Main Area -->
+    <div class="vertical layout fit main">
+      <paper-icon-item>
+        <img src="[[user.picture.medium]]" item-icon>
+        <paper-item-body>
+          <div>
+            <span>[[user.name.first]]</span>
+            <span>[[user.name.last]]</span>
+          </div>
+          <div secondary>[[user.username]]</div>
+        </paper-item-body>
+      </paper-icon-item>
+      <paper-item>Home</paper-item>
+      <paper-item>Settings</paper-item>
+      <paper-item>Invite Friends</paper-item>
+      <div class="flex"></div>
+      <paper-item>Log Out</paper-item>
+    </div>
+
+  </template>
+</dom-module>
+<script src="pluto-drawer-menu.js"></script>

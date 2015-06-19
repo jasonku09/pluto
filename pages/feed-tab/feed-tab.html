@@ -1,0 +1,98 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
+<link rel="import" href="../../app/pluto-feed-stats/pluto-feed-stats.html">
+
+<dom-module id="feed-tab">
+  <style>
+    .main{
+      background-color: #f1f1f1;
+      padding: 10px;
+      overflow: auto;
+    }
+    paper-material{
+      background-color: white;
+      width: 100%;
+    }
+    .avatar{
+      width: 40px;
+      height: 40px;
+      border: 2px solid lightgrey;
+      border-radius: 50%;
+    }
+    .avatar + div{
+      font-size: 10px;
+    }
+    .feed-item{
+      margin-bottom: 8px;
+      border: 1px solid rgb(239, 239, 239)
+    }
+    paper-icon-item div[secondary], paper-toolbar paper-item{
+      font-size: 12px;
+    }
+    paper-icon-item div{
+      font-size: 12px;
+    }
+    .feed-item paper-toolbar, .feed-item /deep/ #topBar{
+      background-color: white;
+      height: 30px;
+      color: #b8b8b8;
+    }
+    div[item-icon] div{
+      text-transform: capitalize;
+    }
+    paper-spinner{
+      margin: 10px;
+    }
+    paper-material:first-of-type{
+      border-left: 5px solid var(--primary-color);
+    }
+  </style>
+  <template>
+    <random-user-generator number-requested="5" on-complete="_onUserReturn" users="{{users}}"></random-user-generator>
+    <div class="fit main">
+      <div class="vertical layout center center-justified">
+
+        <!-- User Stats -->
+        <paper-material class="feed-item" elevation="1">
+          <pluto-feed-stats></pluto-feed-stats>
+        </paper-material>
+
+        <!-- Pluto Feed -->
+        <template is="dom-repeat" items="[[feed]]">
+          <paper-material class="feed-item" elevation="1">
+            <paper-icon-item class="center horizontal layout">
+              <div class="vertical layout center center-justified" item-icon>
+                <img class="avatar" src="[[item.avatar]]" >
+                <div>[[item.name]]</div>
+              </div>
+              <div class="vertical layout">
+                <div class="horizontal layout">
+                  <paper-item-body two-line>
+                    <div secondary>[[item.timestamp]]</div>
+                    <div>[[item.description]]</div>
+                  </paper-item-body>
+                  <paper-item style="color:green">+$15</paper-item>
+                </div>
+                <paper-toolbar>
+                  <div class="flex"></div>
+                  <paper-item>Like</paper-item>
+                  <paper-item>Comment</paper-item>
+                </paper-toolbar>
+              </div>
+            </paper-icon-item>
+          </paper-material>
+        </template>
+
+        <paper-spinner active></paper-spinner>
+
+      </div>
+    </div>
+  </template>
+</dom-module>
+
+<script src="feed-tab.js"></script>

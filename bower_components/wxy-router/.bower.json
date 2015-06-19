@@ -1,0 +1,30 @@
+{
+  "name": "wxy-router",
+  "main": "wxy-router.html",
+  "homepage": "https://github.com/wuxiaoying/wxy-router",
+  "authors": [
+    "helenxywu <xiaoyingw12@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "components/",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "route-recognizer": "~0.1.1",
+    "polymer": "Polymer/polymer#^0.8.0"
+  },
+  "_release": "7b3d7b69b6",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "7b3d7b69b633e420b916fa2df9bdf2676b5eafc7"
+  },
+  "_source": "git://github.com/wxy-elements/wxy-router.git",
+  "_target": "*",
+  "_originalSource": "wxy-elements/wxy-router"
+}

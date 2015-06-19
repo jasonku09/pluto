@@ -1,0 +1,51 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="pluto-feed-stats">
+  <style>
+    :host {
+      display: block;
+    }
+    paper-item:first-child{
+      font-size: 18px;
+    }
+    paper-item{
+      text-align: center;
+      display: flex;
+      flex-grow: 1;
+      font-weight: 100;
+    }
+    paper-item-body div{
+      color: green;
+      font-size: 24px;
+    }
+    paper-item-body div[secondary]{
+      font-size: 10px;
+      color: #b8b8b8;
+    }
+  </style>
+  <template>
+      <paper-item>Good Afternoon, Sydnie!</paper-item>
+      <div class="horizontal layout flex">
+        <paper-item>
+          <paper-item-body two-line>
+            <div>$<span>[[spendable]]</span></div>
+            <div secondary>Spendable</div>
+          </paper-item-body>
+        </paper-item>
+        <paper-item>
+          <paper-item-body two-line>
+            <div>$<span>[[saved]]</span></div>
+            <div secondary>Saved this month</div>
+          </paper-item-body>
+        </paper-item>
+        <paper-item>
+          <paper-item-body two-line>
+            <div>$<span>[[cash]]</span></div>
+            <div secondary>Total Assets</div>
+          </paper-item-body>
+        </paper-item>
+      </div>
+  </template>
+</dom-module>
+
+<script src="pluto-feed-stats.js"></script>
