@@ -62,6 +62,7 @@ Polymer
       return 'expand-more'
     else return 'chevron-right'
 
+
   attached: ->
     @savingsCollapseOpen = false
     @goalsCollapseOpen = false
@@ -128,6 +129,11 @@ Polymer
       @$.goalsToolbar.elevation = 0
       @animating = true
       @playAnimation('entry')
+      context = @
+      setTimeout ->
+        context.$['goals-list-container'].style.display = 'block'
+        return
+      , 100
     else
       @goalsCollapseOpen = false
       @$.goalsToolbar.elevation = 1
@@ -135,6 +141,9 @@ Polymer
       @playAnimation('test')
     return
 
+
   _onNeonAnimationFinish: ->
+    if !@goalsCollapseOpen
+      @$['goals-list-container'].style.display = 'none'
     @animating = false
     return

@@ -24,7 +24,7 @@ Polymer
 
   attached: ->
     if !@tab
-      @tab = "Goals"
+      @tab = "Feed"
     return
 
   _computeIconStyle: (item)->

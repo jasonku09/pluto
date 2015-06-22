@@ -74,13 +74,15 @@
 
         <!-- Goal List -->
         <iron-collapse id="goalsCollapse">
-          <template id="goals-list" is="dom-repeat" items="[[goals]]">
-            <div class="goal-item">
-              <paper-material elevation="1">
-                <goal-item goal="[[item]]" on-tap="_onItemTap"></goal-item>
-              </paper-material>
-            </div>
-          </template>
+          <div id="goals-list-container">
+            <template id="goals-list" is="dom-repeat" items="[[goals]]">
+              <div class="goal-item">
+                <paper-material elevation="1">
+                  <goal-item goal="[[item]]" on-tap="_onItemTap"></goal-item>
+                </paper-material>
+              </div>
+            </template>
+          </div>
         </iron-collapse>
 
         <!-- Add Fab -->

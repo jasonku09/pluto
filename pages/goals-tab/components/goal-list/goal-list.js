@@ -133,7 +133,7 @@
       }
     },
     _toggleGoalsList: function() {
-      var collapse;
+      var collapse, context;
       if (this.animating) {
         return;
       }
@@ -144,6 +144,10 @@
         this.$.goalsToolbar.elevation = 0;
         this.animating = true;
         this.playAnimation('entry');
+        context = this;
+        setTimeout(function() {
+          context.$['goals-list-container'].style.display = 'block';
+        }, 100);
       } else {
         this.goalsCollapseOpen = false;
         this.$.goalsToolbar.elevation = 1;
@@ -152,6 +156,9 @@
       }
     },
     _onNeonAnimationFinish: function() {
+      if (!this.goalsCollapseOpen) {
+        this.$['goals-list-container'].style.display = 'none';
+      }
       this.animating = false;
     }
   });

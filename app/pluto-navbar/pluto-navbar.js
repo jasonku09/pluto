@@ -27,7 +27,7 @@
     },
     attached: function() {
       if (!this.tab) {
-        this.tab = "Goals";
+        this.tab = "Feed";
       }
     },
     _computeIconStyle: function(item) {
