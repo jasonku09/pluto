@@ -1,6 +1,7 @@
 <link rel="import" href="bower_components/polymer/polymer.html">
 <link rel="import" href="bower_components/wxy-router/wxy-router.html">
 <link rel="import" href="pages/home-page/home-page.html">
+<link rel="import" href="pages/login-page/login-page.html">
 
 <dom-module id="pluto-app">
   <style>
@@ -10,13 +11,16 @@
       --main-toolbar-height: 50px;
       --scaffold-tool-color: #4690d0;
       --accent-color: #62b8ed;
+      --infobar-height: 16px;
     }
   </style>
   <template>
     <wxy-router key="main">
-      <wxy-route path="/*tab"
-                 name="home-page"></wxy-route>
       <wxy-route path="/"
+                 name="login-page"></wxy-route>
+      <wxy-route path="/login"
+                 name="login-page"></wxy-route>
+      <wxy-route path="/home"
                  name="home-page"></wxy-route>
     </wxy-router>
   </template>
@@ -24,7 +28,19 @@
 
 <script>
   Polymer({
-    is: 'pluto-app'
+    is: 'pluto-app',
 
+    attached: function(){
+      var appPath = document.location.pathname;
+      Parse.initialize("wyHN7j7ZM8b3sUeGBP6jVXwujNZbYS3roG52yoiX", "2d5bXrkFyNfWJj1LRgZeJj3gEWGVQZF71nP9ww1F");
+      var currentUser = Parse.User.current();
+
+      if(currentUser){
+        window.location.href = appPath + "#/home"
+      }
+      if(currentUser === null){
+        window.location.href = appPath + "#/login"
+      }
+    }
   });
 </script>

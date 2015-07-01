@@ -1,0 +1,66 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/gold-email-input/gold-email-input.html">
+
+<link rel="import" href="../../app/pluto-loading-indicator/pluto-loading-indicator.html">
+
+<dom-module id="login-page">
+  <link rel="import" type="css" href="login-page.css">
+  <style>
+    :host {
+      display: block;
+      --paper-input-container-color: rgb(241, 241, 241);
+      --paper-input-container-focus-color: rgb(199, 254, 246);
+      --paper-input-container-input-color: white;
+      --paper-input-container-invalid-color: rgb(241, 58, 58);
+    }
+  </style>
+  <template>
+    <div class="vertical layout fit main center center-justified">
+      <paper-item>
+        <div id="logo">pluto</div>
+      </paper-item>
+
+      <!-- Input Fields -->
+      <div id="inputContainer" class="vertical layout center center-justified">
+        <paper-item>
+          <iron-icon icon="mail"></iron-icon>
+          <gold-email-input id="emailInput" label="email" value="{{email}}" error-message="invalid email"></gold-email-input>
+        </paper-item>
+        <paper-item>
+          <iron-icon icon="https"></iron-icon>
+          <paper-input id="passwordInput" label="password" value="{{password}}" type="password"></paper-input>
+        </paper-item>
+        <iron-collapse id="signupCollapse">
+          <div id="container" class="vertical layout center center-justified">
+            <paper-item>
+              <iron-icon icon="account-circle"></iron-icon>
+              <paper-input id="nameInput" label="full name" value="{{name}}"></paper-input>
+            </paper-item>
+            <paper-item >
+              <iron-icon icon="face"></iron-icon>
+              <paper-input id="usernameInput" label="username" value="{{username}}"></paper-input>
+            </paper-item>
+          </div>
+        </iron-collapse>
+        <paper-item class="error-label" hidden$="[[!error]]">[[errorMessage]]</paper-item>
+      </div>
+
+      <!-- Button Group -->
+      <div class="button-group vertical layout" id="buttonContainer">
+        <paper-button hidden$="[[signup]]" on-tap="_onLoginTap" >Login</paper-button>
+        <paper-button on-tap="_onSignupTap" >Signup</paper-button>
+        <paper-button hidden$="[[!signup]]" on-tap="_onCancelTap" >Cancel</paper-button>
+      </div>
+
+      <div class="vertical layout fit center center-justified" hidden$=[[!loading]]>
+      <pluto-loading-indicator id="loadingIndicator" label="[[loadingLabel]]"></pluto-loading-indicator>
+      </div>
+    </div>
+  </template>
+</dom-module>
+<script src="login-page.js"></script>

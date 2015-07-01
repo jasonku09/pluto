@@ -13,6 +13,7 @@
     "polymer": "~1.0.3",
     "iron-elements": "polymerelements/iron-elements#~1.0.0",
     "paper-elements": "polymerelements/paper-elements#~1.0.1",
-    "wxy-router": "http://github.com/wuxiaoying/wxy-router"
+    "wxy-router": "http://github.com/wuxiaoying/wxy-router",
+    "gold-elements": "polymerelements/gold-elements#~1.0.1"
   }
 }

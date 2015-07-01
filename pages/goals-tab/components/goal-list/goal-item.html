@@ -1,6 +1,7 @@
 <link rel="import" href="../../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../../bower_components/paper-progress/paper-progress.html">
 <link rel="import" href="../../../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../../../bower_components/iron-image/iron-image.html">
 
 <dom-module id="goal-item">
   <style>
@@ -18,12 +19,21 @@
       --paper-progress-active-color: rgb(56, 210, 187);
       --paper-progress-secondary-color: white;
     }
-    #image-container{
+    .image-container{
+      position:relative;
       width: var(--image-size);
       height: var(--image-size);
-      background-size:cover;
-      background-position: 50% 50%;
-      display: block;
+    }
+    iron-image{
+      width: var(--image-size);
+      height: var(--image-size);
+    }
+    iron-image::before{
+      content: "";
+      position:absolute;
+      width: var(--image-size);
+      height: var(--image-size);
+      background-image: linear-gradient(rgba(0, 0, 0, 0.5),rgba(0, 0, 0, 0.5));
     }
     paper-item-body > * {
       font-weight: 100;
@@ -37,7 +47,9 @@
   </style>
   <template>
     <div class="horizontal layout">
-      <div id="image-container" style$="[[_computeItemImage(goal)]]"></div>
+      <div class="image-container">
+        <iron-image src="[[goal.image]]" sizing="contain"></iron-image>
+      </div>
       <paper-item>
         <paper-item-body two-line>
           <div>[[goal.name]]<span style="margin-left:15px;color: grey">[[goal.saved]]</span>%</div>

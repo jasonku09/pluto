@@ -1,0 +1,32 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="pluto-loading-indicator">
+  <link rel="import" type="css" href="pluto-loading-indicator.css">
+  <style>
+    #label{
+      color: white;
+      font-weight: 100;
+      letter-spacing: 2px;
+      margin-top: 20px;
+      font-size: 12px;
+      font-family: 'Roboto'
+    }
+  </style>
+  <template>
+    <div class="vertical layout center center-justified">
+      <div class="loader">
+        <div class="inner one"></div>
+        <div class="inner two"></div>
+        <div class="inner three"></div>
+      </div>
+      <div id="label">[[label]]</div>
+    </div>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'pluto-loading-indicator',
+
+  });
+</script>

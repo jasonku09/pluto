@@ -16,7 +16,11 @@
     paper-item{
       font-weight: 100;
     }
-
+    .move-to-center{
+      right: 46%;
+      bottom: 46%;
+      -webkit-transition: all 0.4s cubic-bezier(0.115, 0.775, 0.550, 0.925);
+    }
     .container{
       margin-bottom: 15px;
     }
@@ -33,10 +37,10 @@
       height: 60px;
     }
     paper-material{
-      transition: all .2s ease-in-out;
+      transition: all .2s linear;
     }
     paper-material:active{
-      -webkit-transform: scale3d(0.95,0.95,1)
+      -webkit-transform: scale3d(0.8,0.8,1)
     }
   </style>
   <template>
@@ -86,7 +90,7 @@
         </iron-collapse>
 
         <!-- Add Fab -->
-        <paper-fab class="bottom-right" icon="add" mini="true"></paper-fab>
+        <paper-fab id="fab" class="bottom-right" icon="add" on-tap="_onAddTap"></paper-fab>
       </div>
     </div>
   </template>

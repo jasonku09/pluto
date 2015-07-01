@@ -29,13 +29,34 @@ Polymer
           name: 'fade-out-animation'
           nodes: document.getElementsByClassName("goal-item")
         ]
+
         'exit': [
+          name: 'ripple-animation'
+          id: 'ripple'
+          fromPage: @
+          timing:
+            duration: 1000
+        ,
+          name: 'ripple-animation'
+          id: 'ripple2'
+          fromPage: @
+          timing:
+            duration: 1400
+            easing: "cubic-bezier(0.465, 0.000, 0.005, 1.060)"
+        ,
           name: 'hero-animation'
           id: 'hero'
           fromPage: @
         ,
+          name: 'hero-animation'
+          id: 'hero2'
+          fromPage: @
+        ,
           name: "fade-out-animation"
           node: @$.main
+          timing:
+            duration: 1
+
         ]
 
   listeners: {
@@ -70,31 +91,44 @@ Polymer
       name: "Coachella Ticket"
       saved: 37
       total: 400
-      image: "../../../../resources/images/coachella.jpg"
+      image: "resources/images/coachella.jpg"
     ,
       name: "Macbook Pro"
       saved: 76
       total: 1300
-      image: "../../../../resources/images/macbook.jpg"
+      image: "resources/images/macbook.jpg"
     ,
       name: "Emergency Fund"
       saved: 5
       total: 1300
-      image: "../../../../resources/images/emergency-fund.jpg"
+      image: "resources/images/emergency-fund.jpg"
     ,
       name: "Birthday Gift"
       saved: 45
       total: 1300
-      image: "../../../../resources/images/birthday-gift.jpg"
+      image: "resources/images/birthday-gift.jpg"
     ,
       name: "New Shoes"
       saved: 98
       total: 1300
-      image: "../../../../resources/images/shoes.jpg"
+      image: "resources/images/shoes.jpg"
     ]
     @playAnimation('entry')
 
 
+  _onAddTap: (e)->
+    @sharedElements = {
+      'ripple': e.target
+      'ripple2': e.target
+      'hero': e.target
+      'hero2': e.target
+    }
+    @$.fab.classList.add('move-to-center')
+    setTimeout =>
+      @fire 'iron-signal', {name: "flush"}
+      @fire 'add-click'
+      @$.fab.classList.remove('move-to-center')
+    , 350
 
   _onItemTap: (e)->
     @selected = @$['goals-list'].itemForElement(e.target)
@@ -105,7 +139,6 @@ Polymer
     @sharedElements = {
       'hero': target
     }
-
     @fire 'item-click'
     return
 

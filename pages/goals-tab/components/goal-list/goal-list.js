@@ -32,12 +32,34 @@
             ],
             'exit': [
               {
+                name: 'ripple-animation',
+                id: 'ripple',
+                fromPage: this,
+                timing: {
+                  duration: 1000
+                }
+              }, {
+                name: 'ripple-animation',
+                id: 'ripple2',
+                fromPage: this,
+                timing: {
+                  duration: 1400,
+                  easing: "cubic-bezier(0.465, 0.000, 0.005, 1.060)"
+                }
+              }, {
                 name: 'hero-animation',
                 id: 'hero',
                 fromPage: this
               }, {
+                name: 'hero-animation',
+                id: 'hero2',
+                fromPage: this
+              }, {
                 name: "fade-out-animation",
-                node: this.$.main
+                node: this.$.main,
+                timing: {
+                  duration: 1
+                }
               }
             ]
           };
@@ -83,30 +105,48 @@
           name: "Coachella Ticket",
           saved: 37,
           total: 400,
-          image: "../../../../resources/images/coachella.jpg"
+          image: "resources/images/coachella.jpg"
         }, {
           name: "Macbook Pro",
           saved: 76,
           total: 1300,
-          image: "../../../../resources/images/macbook.jpg"
+          image: "resources/images/macbook.jpg"
         }, {
           name: "Emergency Fund",
           saved: 5,
           total: 1300,
-          image: "../../../../resources/images/emergency-fund.jpg"
+          image: "resources/images/emergency-fund.jpg"
         }, {
           name: "Birthday Gift",
           saved: 45,
           total: 1300,
-          image: "../../../../resources/images/birthday-gift.jpg"
+          image: "resources/images/birthday-gift.jpg"
         }, {
           name: "New Shoes",
           saved: 98,
           total: 1300,
-          image: "../../../../resources/images/shoes.jpg"
+          image: "resources/images/shoes.jpg"
         }
       ];
       return this.playAnimation('entry');
+    },
+    _onAddTap: function(e) {
+      this.sharedElements = {
+        'ripple': e.target,
+        'ripple2': e.target,
+        'hero': e.target,
+        'hero2': e.target
+      };
+      this.$.fab.classList.add('move-to-center');
+      return setTimeout((function(_this) {
+        return function() {
+          _this.fire('iron-signal', {
+            name: "flush"
+          });
+          _this.fire('add-click');
+          return _this.$.fab.classList.remove('move-to-center');
+        };
+      })(this), 350);
     },
     _onItemTap: function(e) {
       var target;

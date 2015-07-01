@@ -9,8 +9,10 @@
     attached: function() {
       return this.parentNode.style.backgroundColor = 'rgba(0,0,0,0)';
     },
-    _onUserReturn: function() {
-      return this.user = this.users[0];
+    _onUserReturn: function() {},
+    _onLogoutTap: function() {
+      Parse.User.logOut();
+      this.router.go('/login');
     }
   });
 

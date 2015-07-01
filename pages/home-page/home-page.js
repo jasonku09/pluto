@@ -1,6 +1,21 @@
 (function() {
   Polymer({
-    is: "home-page"
+    is: "home-page",
+    attached: function() {
+      var currentUser, user;
+      currentUser = Parse.User.current();
+      user = {};
+      user.name = currentUser.get('fullname');
+      user.email = currentUser.get('email');
+      user.username = currentUser.get('username');
+      this.user = user;
+    },
+    _onSignalFlush: function() {
+      this.$.toolbar.style.display = "none";
+    },
+    _onSignalRaise: function() {
+      this.$.toolbar.style.display = "block";
+    }
   });
 
 }).call(this);

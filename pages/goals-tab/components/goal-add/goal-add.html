@@ -1,0 +1,54 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer.html">
+
+<dom-module id="goal-add">
+  <style>
+    :host {
+      display: block;
+    }
+    paper-toolbar{
+      background: var(--primary-background);
+    }
+    #main{
+      background-color: white;
+    }
+    #fixed{
+      position:fixed;
+      top: var(--infobar-height);
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: rgba(195, 235, 229, 1);
+      z-index: 997;
+    }
+    #fixedtwo{
+      position:fixed;
+      top: var(--infobar-height);
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: rgba(143, 215, 205, 1);
+      z-index: 997;
+    }
+    paper-header-panel{
+      position:fixed;
+      top: var(--infobar-height);
+      left: 0;
+      height: 100%;
+      width: 100%;
+      z-index: 1000;
+    }
+  </style>
+  <template>
+    <div id="fixed"></div>
+    <div id="fixedtwo"></div>
+    <paper-header-panel mode="seamed" id="panel">
+      <paper-toolbar id="toolbar">
+        <iron-icon icon="arrow-back" on-tap="_onBackTap"></iron-icon>
+        <paper-item id="toolbarText"><div>Create Goal</div></paper-item>
+      </paper-toolbar>
+      <div class="vertical layout fit" id="main">
+      </div>
+    </paper-header-panel>
+  </template>
+</dom-module>
+<script src="goal-add.js"></script>

@@ -9,4 +9,8 @@ Polymer
     @.parentNode.style.backgroundColor = 'rgba(0,0,0,0)'
 
   _onUserReturn: ->
-    @user = @users[0]
+
+  _onLogoutTap: ->
+    Parse.User.logOut()
+    @router.go '/login'
+    return

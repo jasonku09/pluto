@@ -46,11 +46,10 @@
     <!-- Main Area -->
     <div class="vertical layout fit main">
       <paper-icon-item>
-        <img src="[[user.picture.medium]]" item-icon>
+        <img src="../../resources/icons/default_profile.png" item-icon>
         <paper-item-body>
           <div>
-            <span>[[user.name.first]]</span>
-            <span>[[user.name.last]]</span>
+            <span>[[user.name]]</span>
           </div>
           <div secondary>[[user.username]]</div>
         </paper-item-body>
@@ -59,7 +58,7 @@
       <paper-item>Settings</paper-item>
       <paper-item>Invite Friends</paper-item>
       <div class="flex"></div>
-      <paper-item>Log Out</paper-item>
+      <paper-item on-tap="_onLogoutTap">Log Out</paper-item>
     </div>
 
   </template>
