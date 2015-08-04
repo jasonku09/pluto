@@ -3,7 +3,6 @@
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
-<link rel="import" href="../../services/random-user-generator/random-user-generator.html">
 
 <dom-module id="pluto-drawer-menu">
   <style>
@@ -41,7 +40,6 @@
     }
   </style>
   <template>
-    <random-user-generator number-requested="1" on-complete="_onUserReturn" users="{{users}}"></random-user-generator>
 
     <!-- Main Area -->
     <div class="vertical layout fit main">
@@ -54,9 +52,9 @@
           <div secondary>[[user.username]]</div>
         </paper-item-body>
       </paper-icon-item>
-      <paper-item>Home</paper-item>
-      <paper-item>Settings</paper-item>
-      <paper-item>Invite Friends</paper-item>
+      <template id="menuRepeat" is="dom-repeat" items="[[menuItems]]">
+        <paper-item on-tap="_onMenuItemTap">[[item.name]]</paper-item>
+      </template>
       <div class="flex"></div>
       <paper-item on-tap="_onLogoutTap">Log Out</paper-item>
     </div>

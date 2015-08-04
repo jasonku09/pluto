@@ -2,12 +2,14 @@
 <link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
 <link rel="import" href="../../bower_components/paper-drawer-panel/paper-drawer-panel.html">
 <link rel="import" href="../../bower_components/paper-header-panel/paper-header-panel.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
 <link rel="import" href="../../bower_components/iron-signals/iron-signals.html">
 <link rel="import" href="../../bower_components/wxy-router/wxy-router.html">
 <link rel="import" href="../../app/pluto-navbar/pluto-navbar.html">
 <link rel="import" href="../../app/pluto-drawer-menu/pluto-drawer-menu.html">
-<link rel="import" href="../feed-tab/feed-tab.html">
-<link rel="import" href="../goals-tab/goals-tab.html">
+
+<link rel="import" href="../challenges-page/challenges-page.html">
 
 <dom-module id="home-page">
   <style>
@@ -17,26 +19,16 @@
     #infoBar{
       width: 100%;
       height: var(--infobar-height);
-      background: var(--primary-background);
-    }
-    #menuIcon{
-      width:30px;
-      height: 30px;
-      position:fixed;
-      left: 25px;
-      top: 30px
+      background: white;
     }
     .header{
       font-weight:100 !important;
-      font-size: 22px !important;
-      letter-spacing: 3px;
-      margin-left: 56px;
-    }
-    paper-toolbar /deep/ #bottomBar{
-      height: 48px;
+      font-size: 16px !important;
+      color: black;
     }
     paper-header-panel > paper-toolbar{
-      background: var(--primary-background);
+      background: white;
+      color: grey;
     }
     paper-tabs /deep/ paper-ripple{
       color: rgba(0,0,0,0);
@@ -44,34 +36,30 @@
   </style>
   <template>
 
-    <!-- Used to raise or lower the header panel -->
-    <iron-signals on-iron-signal-flush="_onSignalFlush"
-                  on-iron-signal-raise="_onSignalRaise"></iron-signals>
-
-    <paper-drawer-panel drawer-width="250px">
+    <paper-drawer-panel id="drawerPanel" drawer-width="250px" force-narrow>
 
         <!-- Drawer -->
-        <pluto-drawer-menu drawer router="[[router]]" user="[[user]]"></pluto-drawer-menu>
+        <pluto-drawer-menu drawer router="[[router]]" user="[[user]]" on-item-selected="_onMenuItemSelected"></pluto-drawer-menu>
 
         <!-- Main Area -->
         <div main>
           <div id="infoBar"></div>
-          <paper-header-panel class="flex" id="mainPanel">
+          <paper-header-panel class="flex" id="mainPanel" mode="seamed">
 
             <!-- Toolbar/Nav -->
-            <paper-toolbar  class="medium-tall vertical layout" tool id="toolbar">
-              <iron-icon id="menuIcon" src="../../resources/icons/menu-icon.png" paper-drawer-toggle></iron-icon>
-              <div ><paper-item class="header">pluto</paper-item></div>
-              <pluto-navbar class="bottom fit" router="[[router]]"></pluto-navbar>
+            <paper-toolbar tool id="toolbar">
+              <iron-icon id="menuIcon" icon="menu" paper-drawer-toggle></iron-icon>
+              <div class="flex"></div>
+              <paper-item class="header">Save on Food & Drinks Challenge</paper-item>
+              <div class="flex"></div>
+              <iron-icon icon="create"></iron-icon>
             </paper-toolbar>
 
             <!-- Tab Area -->
             <div class="fit vertical layout">
-              <wxy-router key="data" class="fit">
-                <wxy-route path="/feed"
-                           name="feed-tab"></wxy-route>
-                <wxy-route path="/goals"
-                          name="goals-tab"></wxy-route>
+              <wxy-router key="data">
+                <wxy-route path="/challenges"
+                           name="challenges-page"></wxy-route>
               </wxy-router>
             </div>
           </paper-header-panel>

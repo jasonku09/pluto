@@ -39,7 +39,6 @@
         user.set("email", this.email);
         user.set("username", this.email);
         user.set("password", this.password);
-        user.set("fullname", this.name);
         user.set("nickname", this.username);
         promise = user.signUp(null);
         promise.then(this._onSignupSuccess.bind(this), this._onError.bind(this));
@@ -52,7 +51,6 @@
       var i, input, inputs, len;
       inputs = [this.$.emailInput, this.$.passwordInput];
       if (this.signup) {
-        inputs.push(this.$.nameInput);
         inputs.push(this.$.usernameInput);
       }
       for (i = 0, len = inputs.length; i < len; i++) {

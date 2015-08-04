@@ -11,12 +11,6 @@
           }, {
             name: "Goals",
             icon: 'flag'
-          }, {
-            name: "Rewards",
-            icon: 'star-border'
-          }, {
-            name: "Dashboard",
-            icon: 'dashboard'
           }
         ]
       },

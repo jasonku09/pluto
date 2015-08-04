@@ -1,15 +1,15 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
 
 <dom-module id="pluto-loading-indicator">
   <link rel="import" type="css" href="pluto-loading-indicator.css">
   <style>
-    #label{
+    paper-item{
       color: white;
       font-weight: 100;
       letter-spacing: 2px;
       margin-top: 20px;
       font-size: 12px;
-      font-family: 'Roboto'
     }
   </style>
   <template>
@@ -19,7 +19,7 @@
         <div class="inner two"></div>
         <div class="inner three"></div>
       </div>
-      <div id="label">[[label]]</div>
+      <paper-item id="label">[[label]]</paper-item>
     </div>
   </template>
 </dom-module>

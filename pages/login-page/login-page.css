@@ -1,1 +1,68 @@
-.main{background:var(--primary-background)}.main /deep/ input{font-weight:100 !important}.error-label{color:#f13a3a;font-size:14px;font-weight:100}#logo{font-weight:100 !important;font-size:30px !important;letter-spacing:15px;margin-left:20px;margin-bottom:50px;color:white}paper-button{color:white;border:1px solid #f1f1f1;border-radius:10px;height:35px;line-height:15px;font-size:14px;text-transform:none;margin-top:10px;width:150px}.button-group{margin-top:30px}paper-input /deep/ label,gold-email-input /deep/ label{font-size:12px !important;color:#ececec !important;font-weight:100 !important;letter-spacing:3px}paper-input,gold-email-input{width:170px}paper-input /deep/ paper-input-container{padding:0}iron-icon{color:white;margin-top:25px;margin-right:10px;width:22px;height:22px}iron-collapse{-webkit-transition-duration:0.6s}#container{opacity:0;background:inherit;-webkit-transition:opacity 1s cubic-bezier(0, 1.06, .35, .99);-webkit-transition-delay:0.45s}.show{opacity:1}.hide{opacity:0}
+.main {
+  background: var(--secondary-background);
+}
+.main /deep/ input {
+  font-weight: 100 !important;
+}
+.error-label {
+  color: #f13a3a;
+  font-size: 14px;
+  font-weight: 100;
+}
+#logo {
+  font-weight: 100 !important;
+  font-size: 30px !important;
+  letter-spacing: 15px;
+  margin-bottom: 50px;
+  color: white;
+}
+paper-button {
+  color: white;
+  border: 1px solid #f1f1f1;
+  border-radius: 10px;
+  height: 35px;
+  line-height: 15px;
+  font-size: 14px;
+  text-transform: none;
+  margin-top: 10px;
+  width: 150px;
+}
+.button-group {
+  margin-top: 30px;
+}
+paper-input /deep/ label,
+gold-email-input /deep/ label {
+  font-size: 12px !important;
+  color: #ececec !important;
+  font-weight: 100 !important;
+  letter-spacing: 3px;
+}
+paper-input,
+gold-email-input {
+  width: 170px;
+}
+paper-input /deep/ paper-input-container {
+  padding: 0;
+}
+iron-icon {
+  color: white;
+  margin-top: 25px;
+  margin-right: 10px;
+  width: 22px;
+  height: 22px;
+}
+iron-collapse {
+  -webkit-transition-duration: 0.6s;
+}
+#container {
+  opacity: 0;
+  background: inherit;
+  -webkit-transition: opacity 1s cubic-bezier(0, 1.06, 0.35, 0.99);
+  -webkit-transition-delay: 0.45s;
+}
+.show {
+  opacity: 1;
+}
+.hide {
+  opacity: 0;
+}

@@ -35,7 +35,6 @@ Polymer
       user.set "email", @email
       user.set "username", @email
       user.set "password", @password
-      user.set "fullname", @name
       user.set "nickname", @username
 
       promise = user.signUp(null)
@@ -49,7 +48,6 @@ Polymer
   _ValidateInputs: ->
     inputs = [@$.emailInput, @$.passwordInput]
     if @signup
-      inputs.push @$.nameInput
       inputs.push @$.usernameInput
     for input in inputs
       if input.value.length is 0

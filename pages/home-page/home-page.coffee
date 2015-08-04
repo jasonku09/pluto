@@ -10,10 +10,6 @@ Polymer
     @user = user
     return
 
-  _onSignalFlush:->
-    @$.toolbar.style.display = "none"
-    return
-
-  _onSignalRaise: ->
-    @$.toolbar.style.display = "block"
+  _onMenuItemSelected: ->
+    @$.drawerPanel.closeDrawer()
     return

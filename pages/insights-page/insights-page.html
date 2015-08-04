@@ -1,0 +1,31 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../controllers/transactions-controller/transactions-controller.html">
+
+<dom-module id="insights-page">
+  <style>
+    paper-toolbar{
+      background-color: var(--primary-color);
+      color:white;
+      width: 100%
+    }
+    paper-item{
+      width: 90%;
+    }
+  </style>
+  <template>
+    <div class="vertical layout fit">
+      <transactions-controller id="transactionsController"></transactions-controller>
+      <paper-toolbar>
+        <iron-icon icon="arrow-back" on-tap="_onBackTap"></iron-icon>
+      </paper-toolbar>
+      <template is="dom-repeat" items="[[categories]]">
+        <paper-item>
+          <div>[[item.name]]</div>
+          <div class="flex"></div>
+          <div>[[item.total]]</div>
+        </paper-item>
+      </template>
+    </div>
+  </template>
+</dom-module>
+<script src="insights-page.js"></script>

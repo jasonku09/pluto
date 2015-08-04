@@ -271,7 +271,7 @@ context. You should place this element as a child of `<body>` whenever possible.
         this._toggleListener(this.opened, document, 'click', this._boundOnCaptureClick, true);
         this._toggleListener(this.opened, document, 'keydown', this._boundOnCaptureKeydown, true);
         this._toggleListenersAsync = null;
-      });
+      }, 100);
     },
 
     // tasks which must occur before opening; e.g. making the element visible

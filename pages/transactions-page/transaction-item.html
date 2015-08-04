@@ -1,0 +1,26 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../index.htmlbower_components/paper-item/paper-item-body.html">
+
+<dom-module id="transaction-item">
+  <style>
+    :host {
+      display: block;
+    }
+    .name{
+      text-overflow:ellipsis;
+      overflow:hidden;
+      white-space: nowrap;
+    }
+  </style>
+  <template>
+    <paper-item id="item" >
+      <paper-item-body two-line>
+        <div class="name">[[transaction.name]]</div>
+        <div secondary>[[transaction.category.0]]</div>
+      </paper-item-body>
+      <div>[[_formatAmount(transaction.amount)]]</div>
+    </paper-item>
+  </template>
+</dom-module>
+<script src="transaction-item.js"></script>

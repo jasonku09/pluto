@@ -1,0 +1,52 @@
+//out: challenges-page.css
+:host {
+  display: block;
+}
+paper-button{
+  border: 1px solid #555555;
+  height: 30px;
+  font-size: 12px;
+  line-height: 12px;
+  border-radius: 10px;
+  width: 110px;
+  margin-top: 20px;
+}
+#transactions-list{
+  position: absolute;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  height: 40%;
+  overflow: auto;
+}
+.active{
+  color: white;
+  background-color: #9ad7db;
+  border: 1px solid #9ad7db;
+}
+transaction-item{
+  border-bottom: 1px solid lightgrey;
+}
+.spendable-container{
+  position:relative;
+  left: 0;
+  right: 0;
+  height: 200px;
+
+  .big-circle{
+    width: 175px;
+    height: 175px;
+    border: 1px solid #666666;
+    border-radius: 50%;
+
+    div{
+      font-size: 50px;
+      color: #666666;
+      font-weight:900
+    }
+    div[secondary]{
+      font-size: 14px;
+      color:grey;
+    }
+  }
+}

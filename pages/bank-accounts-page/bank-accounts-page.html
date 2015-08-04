@@ -1,0 +1,94 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+
+<link rel="import" href="../../app/pluto-chart/pluto-chart.html">
+<link rel="import" href="../../services/pluto-user/pluto-user.html">
+<link rel="import" href="../../controllers/bank-accounts-controller/bank-accounts-controller.html">
+
+<dom-module id="bank-accounts-page">
+  <style>
+    paper-toolbar{
+      background-color: var(--primary-color);
+      color:white;
+      width: 100%
+    }
+    .title{
+      margin-top: 20px;
+      padding-bottom: 30px;
+      font-size: 25px;
+      letter-spacing: 1px;
+      border-bottom: none;
+      font-weight: 100;
+    }
+    paper-item{
+      font-size: 12px;
+      width:85%;
+      border-bottom: 3px solid rgb(240, 240, 240);
+    }
+    paper-item iron-icon{
+      color: lightgrey;
+    }
+    .money{
+      color: var(--green-color);
+    }
+    pluto-chart{
+      margin-bottom: 20px;
+      margin-left: 15px;
+    }
+    paper-item iron-icon {
+      margin-right: 10px;
+    }
+  </style>
+  <template>
+    <iron-localstorage
+      id="bankAccountsStorage"
+      name="bankAccounts"
+      value="{{bankAccounts}}"></iron-localstorage>
+    <bank-accounts-controller id="bankAccountsController"></bank-accounts-controller>
+    <pluto-user id="user"></pluto-user>
+
+    <div class="vertical layout fit center" style="background-color:white">
+      <paper-toolbar>
+        <iron-icon icon="arrow-back" on-tap="_onBackTap"></iron-icon>
+      </paper-toolbar>
+      <paper-item class="horizontal layout center-justified title">
+        <div>My bank accounts</div>
+        <paper-icon-button icon="refresh" on-tap="_onRefreshTap"></paper-icon-button>
+      </paper-item>
+      <div hidden$="[[_computeChartHidden(bankData)]]">
+        <!--<pluto-chart id="chart" chart-width="175" chart-height="175" data="[[bankData]]" hidden$="[[_computeChartHidden(bankData)]]"></pluto-chart>-->
+        <paper-item>
+          <div>Total Assets: <span class="money">[[_computeTotalAssets(bankAccounts)]]</span></div>
+        </paper-item>
+      </div>
+
+      <paper-item>Cash Accounts</paper-item>
+      <template is="dom-repeat" items="[[_getCashAccounts(bankAccounts)]]" as="account">
+        <paper-item>
+          <iron-icon icon="label" style$="[[_computeIconColor(bank.color)]]"></iron-icon>
+          <div class="flex-3">[[_getAccountName(account)]]</div>
+          <div class="money flex">[[_getAccountBalance(account)]]</div>
+        </paper-item>
+      </template>
+
+      <paper-item>Credit Cards</paper-item>
+      <template is="dom-repeat" items="[[_getCreditAccounts(bankAccounts)]]" as="account">
+        <paper-item>
+          <iron-icon icon="label" style$="[[_computeIconColor(bank.color)]]"></iron-icon>
+          <div class="flex-3">[[_getAccountName(account)]]</div>
+          <div class="money flex">[[_getAccountBalance(account)]]</div>
+        </paper-item>
+      </template>
+
+      <paper-item on-tap="_onAddTap">
+        <div>[[_computeAddText(bankData)]]</div>
+        <div class="flex"></div>
+        <iron-icon icon="chevron-right"></iron-icon>
+      </paper-item>
+    </div>
+  </template>
+</dom-module>
+<script src="bank-accounts-page.js"></script>

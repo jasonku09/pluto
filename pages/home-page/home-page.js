@@ -10,11 +10,8 @@
       user.username = currentUser.get('username');
       this.user = user;
     },
-    _onSignalFlush: function() {
-      this.$.toolbar.style.display = "none";
-    },
-    _onSignalRaise: function() {
-      this.$.toolbar.style.display = "block";
+    _onMenuItemSelected: function() {
+      this.$.drawerPanel.closeDrawer();
     }
   });
 

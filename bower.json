@@ -13,7 +13,10 @@
     "polymer": "~1.0.3",
     "iron-elements": "polymerelements/iron-elements#~1.0.0",
     "paper-elements": "polymerelements/paper-elements#~1.0.1",
-    "wxy-router": "http://github.com/wuxiaoying/wxy-router",
-    "gold-elements": "polymerelements/gold-elements#~1.0.1"
+    "gold-elements": "polymerelements/gold-elements#~1.0.1",
+    "iron-pages": "polymerelements/iron-pages#~1.0.2",
+    "chartjs": "~1.0.2",
+    "iron-list": "polymerelements/iron-list#~1.0.2",
+    "moment": "~2.10.6"
   }
 }
