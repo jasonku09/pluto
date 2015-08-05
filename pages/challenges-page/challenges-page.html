@@ -2,16 +2,14 @@
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
 <link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 
-<link rel="import" href="../transactions-page/transaction-item.html">
-<link rel="import" href="../../controllers/transactions-controller/transactions-controller.html">
+<link rel="import" href="../../app/challenges-transactions-list/challenges-transactions-list.html">
 <link rel="import" href="../../app/pluto-chart/pluto-chart.html">
 
 <dom-module id="challenges-page">
   <link rel="import" type="css" href="challenges-page.css">
   <template>
-    <transactions-controller id="transactionsController"></transactions-controller>
-
     <div class="vertical layout fit center">
 
       <!-- Header -->
@@ -33,17 +31,9 @@
       <div>Projected to save this week: $65.32</div>
 
       <!-- Transaction List -->
-      <div class="horizontal layout">
-        <paper-button id="foodButton" on-tap="_onFoodTap">Food/Drinks</paper-button>
-        <paper-button id="allButton" on-tap="_onAllTap">All</paper-button>
-      </div>
-      <div id="transactions-list">
-        <iron-list items="[[filteredTransactions]]" as="transaction" class="fit">
-          <template>
-            <transaction-item transaction="[[transaction]]"></transaction-item>
-          </template>
-        </iron-list>
-      </div>
+      <challenges-transactions-list on-change-success="_onChangeSuccess"></challenges-transactions-list>
+
+      <paper-toast id="successToast" duration="1000">Change Successful!</paper-toast>
 
     </div>
   </template>

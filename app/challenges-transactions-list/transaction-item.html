@@ -1,0 +1,55 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
+
+<dom-module id="transaction-item">
+  <style>
+    :host {
+      display: block;
+    }
+    .name{
+      text-overflow:ellipsis;
+      overflow:hidden;
+      white-space: nowrap;
+    }
+    paper-item{
+      background-color: white;
+      position:relative;
+      padding:0;
+    }
+    .delete{
+      width: 100px;
+      height: 100%;
+      background-color: #9ad7db;
+      position:absolute;
+      right: 0;
+      z-index: 0;
+      color: white;
+    }
+    paper-item-body{
+      z-index: 1;
+      padding: 0 16px 0 16px;
+      width: 100%;
+      background-color: white;
+    }
+    .transition{
+      -webkit-transition: all 0.4s ease;
+    }
+  </style>
+  <template>
+    <paper-item>
+      <paper-item-body id="item" on-track="_handleTrack" two-line>
+        <div class="horizontal layout center">
+          <div class="vertical layout"></div>
+            <div class="name">[[transaction.name]]</div>
+            <div secondary>[[transaction.category.0]]</div>
+          </div>
+          <div class="flex"></div>
+          <div>[[_formatAmount(transaction.amount)]]</div>
+        </div>
+      </paper-item-body>
+      <div class="delete vertical layout center center-justified" on-tap="_onCategorizeTap">[[_computeSwipeText(transaction)]]</div>
+    </paper-item>
+  </template>
+</dom-module>
+<script src="transaction-item.js"></script>
