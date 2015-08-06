@@ -8,24 +8,14 @@ Polymer
 
   attached: ->
     @transactionsController = @$.transactionsController
-    promise = @transactionsController.GetTransactions(moment().weekday(1).subtract(14, 'days'), moment().weekday(7).subtract(14, 'days'))
-    self = this
-    promise.then (transactions)->
-      self._ParseTransactions(transactions)
+    @transactionsParser = @$.transactionsParser
+    promise = @transactionsController.GetTransactions(null, moment().weekday(1).subtract(14, 'days'), moment().weekday(7).subtract(14, 'days'))
+    promise.then (transactions)=>
+      @transactions = @transactionsParser.Parse(transactions)
+      @FilterTransactions()
     , (error)->
       alert error
     @transactionsFilter = 'food'
-    return
-
-  _ParseTransactions: (transactions)->
-    temp = []
-    for transaction in transactions
-      transaction.attributes.timestamp = moment(transaction.attributes.timestamp).format('M / D')
-      transaction.attributes.category = transaction.attributes.category || ["UNCATEGORIZED"]
-      transaction.attributes.objectId = transaction.id
-      temp.push transaction.attributes
-    @transactions = temp
-    @FilterTransactions()
     return
 
   FilterTransactions: ->

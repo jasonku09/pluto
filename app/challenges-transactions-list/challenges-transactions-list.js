@@ -8,29 +8,19 @@
       }
     },
     attached: function() {
-      var promise, self;
+      var promise;
       this.transactionsController = this.$.transactionsController;
-      promise = this.transactionsController.GetTransactions(moment().weekday(1).subtract(14, 'days'), moment().weekday(7).subtract(14, 'days'));
-      self = this;
-      promise.then(function(transactions) {
-        return self._ParseTransactions(transactions);
-      }, function(error) {
+      this.transactionsParser = this.$.transactionsParser;
+      promise = this.transactionsController.GetTransactions(null, moment().weekday(1).subtract(14, 'days'), moment().weekday(7).subtract(14, 'days'));
+      promise.then((function(_this) {
+        return function(transactions) {
+          _this.transactions = _this.transactionsParser.Parse(transactions);
+          return _this.FilterTransactions();
+        };
+      })(this), function(error) {
         return alert(error);
       });
       this.transactionsFilter = 'food';
-    },
-    _ParseTransactions: function(transactions) {
-      var i, len, temp, transaction;
-      temp = [];
-      for (i = 0, len = transactions.length; i < len; i++) {
-        transaction = transactions[i];
-        transaction.attributes.timestamp = moment(transaction.attributes.timestamp).format('M / D');
-        transaction.attributes.category = transaction.attributes.category || ["UNCATEGORIZED"];
-        transaction.attributes.objectId = transaction.id;
-        temp.push(transaction.attributes);
-      }
-      this.transactions = temp;
-      this.FilterTransactions();
     },
     FilterTransactions: function() {
       var food, i, len, other, ref, transaction;

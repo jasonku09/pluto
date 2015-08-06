@@ -5,11 +5,13 @@
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 
 <link rel="import" href="../../app/challenges-transactions-list/challenges-transactions-list.html">
+<link rel="import" href="../../services/transactions-parser/transactions-parser.coffee">
 <link rel="import" href="../../app/pluto-chart/pluto-chart.html">
 
 <dom-module id="challenges-page">
   <link rel="import" type="css" href="challenges-page.css">
   <template>
+    <transactions-parser id="transactionsParser"></transactions-parser>
     <div class="vertical layout fit center">
 
       <!-- Header -->

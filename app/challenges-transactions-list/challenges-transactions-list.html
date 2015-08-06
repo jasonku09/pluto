@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
 <link rel="import" href="../../controllers/transactions-controller/transactions-controller.html">
+<link rel="import" href="../../services/transactions-parser/transactions-parser.html">
 <link rel="import" href="transaction-item.js">
 
 <dom-module id="challenges-transactions-list">
@@ -36,7 +37,8 @@
   </style>
   <template>
     <transactions-controller id="transactionsController"></transactions-controller>
-
+    <transactions-parser id="transactionsParser"></transactions-parser>
+    
     <div class="horizontal layout">
       <paper-button id="foodButton" on-tap="_onFoodTap">Food/Drinks</paper-button>
       <paper-button id="allButton" on-tap="_onOtherTap">Other</paper-button>

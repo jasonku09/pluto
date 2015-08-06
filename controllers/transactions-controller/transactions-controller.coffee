@@ -22,15 +22,23 @@ Polymer
     query.lessThan 'timestamp', max
     query.count()
 
-  GetTransactions: (min, max, page, limit)->
-    min = new Date(min) || new Date( new Date() - 1000 * 60 * 60 * 24 * 365 * 100) # 100 years ago
-    max = new Date(max) || new Date() # today
+  GetTransactions: (category, min, max, page, limit)->
+    if min
+      min = new Date(min)
+    else
+      min = new Date( new Date() - 1000 * 60 * 60 * 24 * 365 * 100) # 100 years ago
+    if max
+      max = new Date(max)
+    else max = new Date() # today
     page = page || 0
     limit = limit || 1000
     Transaction = Parse.Object.extend "Transaction"
     query = new Parse.Query(Transaction)
+    if category
+      query.equalTo 'category', category
     query.limit(limit)
     query.greaterThan 'timestamp', min
     query.lessThan 'timestamp', max
     query.skip page * limit
+    query.descending 'timestamp'
     query.find()
