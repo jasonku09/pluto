@@ -11,12 +11,13 @@
   ],
   "dependencies": {
     "polymer": "~1.0.3",
-    "iron-elements": "polymerelements/iron-elements#~1.0.0",
-    "paper-elements": "polymerelements/paper-elements#~1.0.1",
+    "iron-elements": "polymerelements/iron-elements#~1.0.2",
+    "paper-elements": "polymerelements/paper-elements#^1.0.2",
     "gold-elements": "polymerelements/gold-elements#~1.0.1",
     "iron-pages": "polymerelements/iron-pages#~1.0.2",
     "chartjs": "~1.0.2",
     "iron-list": "polymerelements/iron-list#~1.0.2",
-    "moment": "~2.10.6"
+    "moment": "~2.10.6",
+    "paper-progress": "polymerelements/paper-progress#1.0.2"
   }
 }

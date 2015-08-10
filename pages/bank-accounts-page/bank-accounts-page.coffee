@@ -6,28 +6,18 @@ Polymer
       type: Array
       notify: true
 
-  _computeAddText: (bankData)->
-    if bankData.length is 0
+    ready:
+      notify: true
+
+  _computeLoaderHidden: (parseTimeRemaining, parseFinish)-> !moment().isBefore(@parseFinish)
+
+  _computeProgressValue: (parseTimeRemaining)->
+    return (moment.duration(5, 'minutes').asSeconds() - parseTimeRemaining) / moment.duration(5, 'minutes').asSeconds() * 100
+
+  _computeAddText: (bankAccounts)->
+    if !bankAccounts || bankAccounts.length is 0
       return "Add account"
     else return "Add another account"
-
-  _computeIconColor: (color)->
-    return 'color:' + color
-
-  _computeChartHidden: (bankData)->
-    if bankData.length is 0
-      return true
-    else return false
-
-  _computeTotalAssets: (bankAccounts)->
-    return if !bankAccounts
-    total = 0
-    for account in bankAccounts
-      if account.type is 'depository'
-        total += parseInt account.balance.current
-      else
-        total -= parseInt account.balance.current
-    return '$ ' + total
 
   _getCashAccounts: (bankAccounts)->
     return if !bankAccounts
@@ -45,20 +35,20 @@ Polymer
         creditAccounts.push account
     creditAccounts
 
-  _getAccountName: (account)->
-    return account.meta.name + " (" + account.meta.number + ")"
+  _getAccountName: (account)-> account.meta.name + " (" + account.meta.number + ")"
 
-  _getAccountBalance: (account)->
-    return '$' + account.balance.current
+  _getAccountBalance: (account)-> '$' + account.balance.current
+
+  _formatAmount: (amount)-> '$ ' + amount
 
   attached: ->
-    @bankAccounts = @bankAccounts || []
-    @_setChartData()
+    @ready = false
     @_createPlaidLink()
+    @_timer()
+    @bankAccounts = @bankAccounts || []
+    if @bankAccounts.length > 0 && moment().isAfter(@parseFinish)
+      @ready = true
     return
-
-  _formatAmount: (amount)->
-    return '$ ' + amount
 
   _onRefreshTap: ->
     banksPromise = @$.bankAccountsController.GetBankAccounts(@$.user.GetSessionToken())
@@ -82,38 +72,9 @@ Polymer
       promise = @$.bankAccountsController.AddBankAccount(@$.user.GetSessionToken(), token)
       self = this
       promise.then ->
+        self._startParseTimer()
         self._onRefreshTap()
         return
-    else
-      amount = Math.random() * 10000
-      if token.indexOf('chase') > -1
-        name = "Chase"
-        color = 'rgb(5, 82, 212)'
-      else if token.indexOf('bofa') > -1
-        name = "Bank of America"
-        color = 'rgb(1, 62, 196)'
-      else if token.indexOf('wells') > -1
-        name = "Wells Fargo"
-        color = 'rgb(185, 0, 0)'
-      else if token.indexOf('citi') > -1
-        name = "Citi"
-      else if token.indexOf('us') > -1
-        name = "US Bank"
-      else if token.indexOf('usaa') > -1
-        name = "USAA"
-      else if token.indexOf('amex') > -1
-        name = "American Express"
-      newBankAccount = {
-        name: name
-        amount: amount.toFixed(2)
-        color: color
-      }
-      tempArray = []
-      for account in @bankAccounts
-        tempArray.push account
-      tempArray.push newBankAccount
-      @bankAccounts = tempArray
-      @_setChartData()
     return
 
   _createPlaidLink: ->
@@ -140,15 +101,21 @@ Polymer
         @_createPlaidLink()
         return
 
-  _setChartData: ->
-    dataArray = []
-    for account in @bankAccounts
-      dataArray.push
-        label: account.name
-        value: account.amount
-        color: account.color
-    @bankData = dataArray
+  _startParseTimer: ->
+    @ready = false
+    @parseFinish = moment().add(5, 'minutes')
+    @_timer()
     return
+
+  _timer: ->
+    setTimeout =>
+      @parseTimeRemaining = moment(@parseFinish).diff(moment(), 'seconds')
+      if @parseTimeRemaining < 0
+        @ready = true
+        return
+      @_timer()
+      return
+    , 1000
 
   _onAddTap: ->
     @PlaidLink.open()

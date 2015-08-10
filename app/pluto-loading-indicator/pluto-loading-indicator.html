@@ -13,7 +13,7 @@
     }
   </style>
   <template>
-    <div class="vertical layout center center-justified">
+    <div class="vertical layout center center-justified" hidden$="[[_computeLoaderOneHidden(type)]]">
       <div class="loader">
         <div class="inner one"></div>
         <div class="inner two"></div>
@@ -21,12 +21,23 @@
       </div>
       <paper-item id="label">[[label]]</paper-item>
     </div>
+    <div class="vertical layout center center-justified" hidden$="[[_computeLoaderTwoHidden(type)]]">
+      <div class="loader-two"></div>
+    </div>
   </template>
 </dom-module>
 
 <script>
   Polymer({
     is: 'pluto-loading-indicator',
+
+    _computeLoaderOneHidden: function(type){
+      return type !== 'nucleus';
+    },
+
+    _computeLoaderTwoHidden: function(type){
+      return type !== 'spinner';
+    }
 
   });
 </script>

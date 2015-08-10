@@ -7,9 +7,13 @@
 <link rel="import" href="../../app/pluto-chart/pluto-chart.html">
 <link rel="import" href="../../services/pluto-user/pluto-user.html">
 <link rel="import" href="../../controllers/bank-accounts-controller/bank-accounts-controller.html">
+<link rel="import" href="../../app/pluto-loading-indicator/pluto-loading-indicator.html">
 
 <dom-module id="bank-accounts-page">
   <style>
+    :host{
+      color:black;
+    }
     paper-toolbar{
       background-color: var(--primary-color);
       color:white;
@@ -27,6 +31,7 @@
       font-size: 12px;
       width:85%;
       border-bottom: 3px solid rgb(240, 240, 240);
+      color: black;
     }
     paper-item iron-icon{
       color: lightgrey;
@@ -38,8 +43,12 @@
       margin-bottom: 20px;
       margin-left: 15px;
     }
-    paper-item iron-icon {
+    paper-item iron-icon{
       margin-right: 10px;
+    }
+    paper-progress{
+      margin-top: 15px;
+      --paper-progress-active-color: var(--primary-color);
     }
   </style>
   <template>
@@ -47,24 +56,16 @@
       id="bankAccountsStorage"
       name="bankAccounts"
       value="{{bankAccounts}}"></iron-localstorage>
+
+    <iron-localstorage
+      id="parseFinishStorage"
+      name="parseFinish"
+      value="{{parseFinish}}"></iron-localstorage>
+
     <bank-accounts-controller id="bankAccountsController"></bank-accounts-controller>
     <pluto-user id="user"></pluto-user>
 
     <div class="vertical layout fit center" style="background-color:white">
-      <paper-toolbar>
-        <iron-icon icon="arrow-back" on-tap="_onBackTap"></iron-icon>
-      </paper-toolbar>
-      <paper-item class="horizontal layout center-justified title">
-        <div>My bank accounts</div>
-        <paper-icon-button icon="refresh" on-tap="_onRefreshTap"></paper-icon-button>
-      </paper-item>
-      <div hidden$="[[_computeChartHidden(bankData)]]">
-        <!--<pluto-chart id="chart" chart-width="175" chart-height="175" data="[[bankData]]" hidden$="[[_computeChartHidden(bankData)]]"></pluto-chart>-->
-        <paper-item>
-          <div>Total Assets: <span class="money">[[_computeTotalAssets(bankAccounts)]]</span></div>
-        </paper-item>
-      </div>
-
       <paper-item>Cash Accounts</paper-item>
       <template is="dom-repeat" items="[[_getCashAccounts(bankAccounts)]]" as="account">
         <paper-item>
@@ -84,10 +85,15 @@
       </template>
 
       <paper-item on-tap="_onAddTap">
-        <div>[[_computeAddText(bankData)]]</div>
+        <div>[[_computeAddText(bankAccounts)]]</div>
         <div class="flex"></div>
         <iron-icon icon="chevron-right"></iron-icon>
       </paper-item>
+
+      <div class="vertical layout center center-justified flex" hidden$="[[_computeLoaderHidden(parseTimeRemaining, parseFinish)]]">
+        <div>Processing Transactions...</div>
+        <pluto-loading-indicator type="spinner"></pluto-loading-indicator>
+      </div>
     </div>
   </template>
 </dom-module>

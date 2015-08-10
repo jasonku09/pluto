@@ -5,40 +5,23 @@
       bankAccounts: {
         type: Array,
         notify: true
+      },
+      ready: {
+        notify: true
       }
     },
-    _computeAddText: function(bankData) {
-      if (bankData.length === 0) {
+    _computeLoaderHidden: function(parseTimeRemaining, parseFinish) {
+      return !moment().isBefore(this.parseFinish);
+    },
+    _computeProgressValue: function(parseTimeRemaining) {
+      return (moment.duration(5, 'minutes').asSeconds() - parseTimeRemaining) / moment.duration(5, 'minutes').asSeconds() * 100;
+    },
+    _computeAddText: function(bankAccounts) {
+      if (!bankAccounts || bankAccounts.length === 0) {
         return "Add account";
       } else {
         return "Add another account";
       }
-    },
-    _computeIconColor: function(color) {
-      return 'color:' + color;
-    },
-    _computeChartHidden: function(bankData) {
-      if (bankData.length === 0) {
-        return true;
-      } else {
-        return false;
-      }
-    },
-    _computeTotalAssets: function(bankAccounts) {
-      var account, i, len, total;
-      if (!bankAccounts) {
-        return;
-      }
-      total = 0;
-      for (i = 0, len = bankAccounts.length; i < len; i++) {
-        account = bankAccounts[i];
-        if (account.type === 'depository') {
-          total += parseInt(account.balance.current);
-        } else {
-          total -= parseInt(account.balance.current);
-        }
-      }
-      return '$ ' + total;
     },
     _getCashAccounts: function(bankAccounts) {
       var account, cashAccounts, i, len;
@@ -74,13 +57,17 @@
     _getAccountBalance: function(account) {
       return '$' + account.balance.current;
     },
-    attached: function() {
-      this.bankAccounts = this.bankAccounts || [];
-      this._setChartData();
-      this._createPlaidLink();
-    },
     _formatAmount: function(amount) {
       return '$ ' + amount;
+    },
+    attached: function() {
+      this.ready = false;
+      this._createPlaidLink();
+      this._timer();
+      this.bankAccounts = this.bankAccounts || [];
+      if (this.bankAccounts.length > 0 && moment().isAfter(this.parseFinish)) {
+        this.ready = true;
+      }
     },
     _onRefreshTap: function() {
       var banksPromise, self;
@@ -104,47 +91,14 @@
       });
     },
     _addBankAccount: function(token) {
-      var account, amount, color, i, len, name, newBankAccount, promise, ref, self, tempArray;
+      var promise, self;
       if (PlutoMetadata.Environment === "Test") {
         promise = this.$.bankAccountsController.AddBankAccount(this.$.user.GetSessionToken(), token);
         self = this;
         promise.then(function() {
+          self._startParseTimer();
           self._onRefreshTap();
         });
-      } else {
-        amount = Math.random() * 10000;
-        if (token.indexOf('chase') > -1) {
-          name = "Chase";
-          color = 'rgb(5, 82, 212)';
-        } else if (token.indexOf('bofa') > -1) {
-          name = "Bank of America";
-          color = 'rgb(1, 62, 196)';
-        } else if (token.indexOf('wells') > -1) {
-          name = "Wells Fargo";
-          color = 'rgb(185, 0, 0)';
-        } else if (token.indexOf('citi') > -1) {
-          name = "Citi";
-        } else if (token.indexOf('us') > -1) {
-          name = "US Bank";
-        } else if (token.indexOf('usaa') > -1) {
-          name = "USAA";
-        } else if (token.indexOf('amex') > -1) {
-          name = "American Express";
-        }
-        newBankAccount = {
-          name: name,
-          amount: amount.toFixed(2),
-          color: color
-        };
-        tempArray = [];
-        ref = this.bankAccounts;
-        for (i = 0, len = ref.length; i < len; i++) {
-          account = ref[i];
-          tempArray.push(account);
-        }
-        tempArray.push(newBankAccount);
-        this.bankAccounts = tempArray;
-        this._setChartData();
       }
     },
     _createPlaidLink: function() {
@@ -177,19 +131,22 @@
         })(this)
       });
     },
-    _setChartData: function() {
-      var account, dataArray, i, len, ref;
-      dataArray = [];
-      ref = this.bankAccounts;
-      for (i = 0, len = ref.length; i < len; i++) {
-        account = ref[i];
-        dataArray.push({
-          label: account.name,
-          value: account.amount,
-          color: account.color
-        });
-      }
-      this.bankData = dataArray;
+    _startParseTimer: function() {
+      this.ready = false;
+      this.parseFinish = moment().add(5, 'minutes');
+      this._timer();
+    },
+    _timer: function() {
+      return setTimeout((function(_this) {
+        return function() {
+          _this.parseTimeRemaining = moment(_this.parseFinish).diff(moment(), 'seconds');
+          if (_this.parseTimeRemaining < 0) {
+            _this.ready = true;
+            return;
+          }
+          _this._timer();
+        };
+      })(this), 1000);
     },
     _onAddTap: function() {
       this.PlaidLink.open();

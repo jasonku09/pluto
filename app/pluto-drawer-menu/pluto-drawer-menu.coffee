@@ -17,7 +17,7 @@ Polymer
       ]
   attached: ->
     @.parentNode.style.backgroundColor = 'rgba(0,0,0,0)'
-    @router.go '/challenges'
+    @router.go '/onboarding'
     return
 
   _onLogoutTap: ->

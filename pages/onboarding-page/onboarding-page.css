@@ -1,0 +1,74 @@
+:host {
+  display: block;
+}
+paper-header-panel {
+  height: 90%;
+}
+paper-header-panel paper-toolbar {
+  background-color: white;
+  width: 100%;
+  color: black;
+  letter-spacing: 3px;
+  border-bottom: 1px solid lightgrey;
+}
+paper-header-panel paper-progress {
+  width: 100%;
+  --paper-progress-active-color: var(--primary-color);
+  --paper-progress-transition-duration: 0.7s;
+  --paper-progress-transition-timing-function: ease-out;
+  --paper-progress-transition-transition-delay: 0s;
+}
+paper-header-panel neon-animated-pages {
+  background-color: #f3c04d;
+  color: white;
+}
+paper-header-panel neon-animated-pages iron-icon {
+  width: 60px;
+  height: 60px;
+  color: rgba(222, 221, 221, 0.5);
+}
+paper-header-panel neon-animated-pages .image-container {
+  background-color: white;
+  height: 120px;
+  width: 120px;
+  border-radius: 50%;
+}
+paper-header-panel neon-animated-pages .selector {
+  height: 35px;
+  width: 35px !important;
+  border-radius: 50%;
+  border: 2px solid var(--primary-color);
+}
+paper-header-panel neon-animated-pages > div {
+  width: 100%;
+}
+paper-header-panel #nextButton {
+  background-color: var(--primary-color);
+  height: 50px;
+  width: 100%;
+  color: white;
+}
+.bold {
+  font-weight: bold;
+  font-size: 18px;
+  margin-top: 10px;
+}
+p,
+span {
+  text-align: center;
+}
+paper-icon-item {
+  width: 100%;
+  color: black;
+  display: flex;
+  border-top: 1px solid lightgrey;
+  flex-grow: 1;
+}
+paper-item-body > div:first-child {
+  font-size: 20px;
+  letter-spacing: 1px;
+}
+.challenge-settings {
+  background-color: white;
+  color: black;
+}

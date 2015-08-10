@@ -22,7 +22,7 @@
     },
     attached: function() {
       this.parentNode.style.backgroundColor = 'rgba(0,0,0,0)';
-      this.router.go('/challenges');
+      this.router.go('/onboarding');
     },
     _onLogoutTap: function() {
       Parse.User.logOut();
