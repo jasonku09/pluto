@@ -1,9 +1,25 @@
 Polymer
   is: 'transactions-controller'
 
-  attached: ->
-    @ajax = @$.ajax
+  ready: ->
+    if PlutoMetadata.Environment is "Production"
+      @baseUrl = 'https://pluto-io.appspot.com'
+    else @baseUrl = "http://localhost:3000"
     return
+
+  UpdateTimestamp: (transactionId, newTimestamp)->
+    Transaction = Parse.Object.extend "Transaction"
+    query = new Parse.Query(Transaction)
+    query.get(transactionId).then (transaction)->
+      transaction.set 'timestamp', new Date newTimestamp
+      transaction.save()
+      return
+
+  UpdateTransactions: (authToken)->
+    queryString = "authtoken=" + authToken
+    accountsPromise = @$.ajax.send
+      url: @baseUrl + '/transactions/update?' + queryString
+      method: 'GET'
 
   UpdateCategory: (transactionId, newCategory)->
     Transaction = Parse.Object.extend "Transaction"

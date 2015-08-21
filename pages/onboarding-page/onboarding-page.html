@@ -6,8 +6,11 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
 <link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
 
+<link rel="import" href="../../app/pluto-confirmation-dialog/pluto-confirmation-dialog.html">
 <link rel="import" href="../../pages/bank-accounts-page/bank-accounts-page.html">
+<link rel="import" href="../../pages/challenge-settings-page/challenge-settings-page.html">
 
 <dom-module id="onboarding-page">
   <link rel="import" type="css" href="onboarding-page.css">
@@ -21,7 +24,7 @@
         <paper-toolbar>
           <paper-icon-button icon="arrow-back" on-tap="_onBackTap" hidden$="[[_computeBackHidden(selectedPage)]]"></paper-icon-button>
           <div class="flex"></div>
-          <div>SET YOUR CHALLENGE</div>
+          <div>[[_computeHeaderText(selectedPage)]]</div>
           <div class="flex"></div>
         </paper-toolbar>
 
@@ -32,42 +35,29 @@
 
             <!-- Page 1 -->
             <div class="vertical layout center center-justified">
-              <div class="flex-1"></div>
-              <div class="horizontal layout center justified" style="width: 100%">
-                <iron-icon icon="chevron-left"></iron-icon>
-                <div class="image-container vertical layout center center-justified">
-                  <img src="../../resources/icons/pretzel.png">
+              <p style="color: #AEAEAE;width: 80%;">Select a challenge to tackle this week and see how much you can save from it!</p>
+              <div class="flex"></div>
+              <div class="vertical layout center center-justified" style="background: #f3c04d; color: white; width: 80%; border: 1px solid lightgrey">
+                <paper-item><span class="bold" style="letter-spacing: 2px;">Spend Less on <br>Food and Drinks</span></paper-item>
+                <div class="horizontal layout center center-justified" style="width: 70%; background-color: #f3c04d">
+                  <div class="image-container vertical layout center center-justified">
+                    <img style="width:70px;height:70px" src="../../resources/icons/pretzel.png">
+                  </div>
                 </div>
-                <iron-icon icon="chevron-right"></iron-icon>
+                <p style="background: white; color: black; margin:0; padding: 20px">Commit to spend less than your average weeky spend on <span style="font-weight:bold">Bars, Cafes and Restaurants</span></p>
               </div>
-              <paper-item><span class="bold" style="letter-spacing: 2px;">Spend Less on Food and Drinks</span></paper-item>
-              <p>This week, you’ll commit to spend less than your average weekly spend on food and drinks. Food and drinks include bars, cafes & restaurants.</p>
-              <span class="bold">Groceries are not included.</span>
-              <div class="flex-2"></div>
+              <div class="flex"></div>
             </div>
 
-            <bank-accounts-page ready="{{bankAccountsReady}}"></bank-accounts-page>
+            <bank-accounts-page ready="{{bankAccountsReady}}" bank-accounts="{{bankAccounts}}"></bank-accounts-page>
 
-            <!-- Page 2 -->
-            <div class="vertical layout center center-justified challenge-settings">
-              <div class="vertical layout flex center">
-                <paper-item style="font-size:12px;">Your average weekly spending on Food & Drink is <span style="color: #9ad7db; margin-left:5px">[[_getWeeklySpending(weeklySpending)]]</span></paper-item>
-                <paper-item style="font-size: 22px; width: 70%"><p>How much do you want to save this week?</p></paper-item>
-              </div>
-              <div class="vertical layout flex" style="background-color: white">
-                <template is="dom-repeat" items="[[challengePercentages]]" as="percentage">
-                  <paper-icon-item>
-                    <div class="selector" item-icon></div>
-                    <paper-item-body two-line>
-                      <div>[[_computeChallengeSavings(percentage)]]</div>
-                      <div secondary>That's <span>[[percentage]]</span>% of your weekly spending</div>
-                    </paper-item-body>
-                  </paper-icon-item>
-                </template>
-              </div>
-            </div>
+            <challenge-settings-page id="challengeSettingsPage" selected-challenge="{{selectedChallenge}}"></challenge-settings-page>
 
           </neon-animated-pages>
+
+          <pluto-confirmation-dialog message="Your weekly challenge on Food and Drinks has been created!"
+                                     id="confirmationDialog"
+                                     on-close="_onConfirmClose"></pluto-confirmation-dialog>
           <div id="nextButton"
                class="vertical layout center center-justified"
                on-tap="_onNextTap"

@@ -1,8 +1,11 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../../bower_components/polymer-paper-datepicker/paper-date-picker.html">
 
 <link rel="import" href="../../controllers/transactions-controller/transactions-controller.html">
 <link rel="import" href="../../services/transactions-parser/transactions-parser.html">
-<link rel="import" href="transaction-item.js">
+<link rel="import" href="transaction-item.html">
 
 <dom-module id="challenges-transactions-list">
   <style>
@@ -23,7 +26,7 @@
       left: 15px;
       right: 15px;
       bottom: 15px;
-      height: 40%;
+      height: 65%;
       overflow: auto;
     }
     .active{
@@ -34,21 +37,47 @@
     transaction-item{
       border-bottom: 1px solid lightgrey;
     }
+    paper-dialog paper-button{
+      background-color: var(--primary-color);
+      color: white;
+      border:none;
+    }
+    .date-dialog{
+      position: absolute;
+      height: 400px;
+      top:0;
+      left:0;
+      overflow: auto;
+    }
   </style>
   <template>
     <transactions-controller id="transactionsController"></transactions-controller>
     <transactions-parser id="transactionsParser"></transactions-parser>
-    
-    <div class="horizontal layout">
-      <paper-button id="foodButton" on-tap="_onFoodTap">Food/Drinks</paper-button>
-      <paper-button id="allButton" on-tap="_onOtherTap">Other</paper-button>
-    </div>
-    <div id="transactions-list">
-      <iron-list items="[[filteredTransactions]]" as="transaction" class="fit">
-        <template>
-          <transaction-item transaction="[[transaction]]" on-category-change="_onCategoryChange"></transaction-item>
-        </template>
-      </iron-list>
+
+    <paper-dialog id="datePicker" no-cancel-on-outside-click>
+      <paper-item>Select a new date</paper-item>
+      <paper-dialog-scrollable>
+        <paper-date-picker date="{{selectedDate}}" min-year="2015" max-year="2016"></paper-date-picker>
+      </paper-dialog-scrollable>
+      <div class="horizontal layout around-justified">
+        <paper-button style="color: black; background-color: white" on-tap="_onCancelTap">Cancel</paper-button>
+          <paper-button on-tap="_onDateConfirm">Ok</paper-button>
+      </div>
+    </paper-dialog>
+    <div class="vertical layout flex">
+      <div class="horizontal layout">
+        <paper-button id="foodButton" on-tap="_onFoodTap">Food/Drinks</paper-button>
+        <paper-button id="allButton" on-tap="_onOtherTap">Other</paper-button>
+      </div>
+      <div id="transactions-list">
+        <iron-list items="[[filteredTransactions]]" as="transaction" class="fit">
+          <template>
+            <transaction-item transaction="[[transaction]]"
+                              on-category-change="_onCategoryChange"
+                              on-date-change="_onDateChange"></transaction-item>
+          </template>
+        </iron-list>
+      </div>
     </div>
   </template>
 </dom-module>

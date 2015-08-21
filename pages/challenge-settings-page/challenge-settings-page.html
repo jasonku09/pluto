@@ -1,0 +1,85 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-item/paper-icon-item.html">
+
+<link rel="import" href="../../app/pluto-loading-indicator/pluto-loading-indicator.html">
+<link rel="import" href="../../services/transactions-parser/transactions-parser.html">
+
+<dom-module id="challenge-settings-page">
+  <style>
+    :host {
+      display: block;
+    }
+    paper-icon-item{
+      width: 92%;
+      color: black;
+      display: flex;
+      border-top: 1px solid lightgrey;
+      flex-grow: 1;
+    }
+    .main{
+      background-color: white;
+      color: black;
+      width: 100%;
+      height: 100%;
+    }
+    .selector{
+      height: 65px;
+      width: 65px !important;
+      border-radius: 50%;
+      border: 2px solid grey;
+    }
+    paper-item span{
+      margin-left:5px
+    }
+    p{
+      font-size: 22px;
+      text-align: center;
+    }
+    paper-item p span{
+      color: #1CBFC9;
+    }
+  </style>
+  <template>
+    <transactions-parser id="transactionsParser"></transactions-parser>
+
+    <div class="vertical layout center center-justified main">
+      <div hidden$="[[!parsing]]">
+        <div>Calculating Weekly Spending</div>
+        <pluto-loading-indicator type="spinner"></pluto-loading-indicator>
+      </div>
+      <div class="vertical layout flex-3 center" hidden$="[[parsing]]">
+        <paper-item style="font-size:12px; text-align:center">
+          <div>
+            Your average spending between
+            <span>[[weekSpan]]</span>
+            on Food & Drink is
+            <span>[[_dollarize(weeklySpending)]]</span>
+          </div>
+        </paper-item>
+        <div class="flex"></div>
+
+        <paper-item hidden$="[[_computeQuestionHidden(selectedPercentage)]]" style="font-size: 22px; width: 70%">
+          <p>How much do you want to save this week?</p>
+        </paper-item>
+
+
+        <paper-item hidden$="[[_computeInfoHidden(selectedPercentage)]]">
+          <p>SPEND<span>[[_dollarize(maxSpend)]]</span></p>
+        </paper-item>
+        <paper-item hidden$="[[_computeInfoHidden(selectedPercentage)]]">
+          <p>SAVE<span>[[_dollarize(saveAmount)]]</span></p>
+        </paper-item>
+        <div class="flex"></div>
+      </div>
+      <div class="horizontal layout flex center around-justified" style="background-color: white; width: 100%" hidden$="[[parsing]]">
+        <template id="percentageRepeat" is="dom-repeat" items="[[challengePercentages]]">
+          <div class="selector horizontal layout center center-justified"
+               on-tap="_onPercentageTap"
+               style$="[[_computeItemStyle(selectedPercentage, item)]]"
+               item-icon><span>[[item]]</span>%</div>
+        </template>
+      </div>
+    </div>
+  </template>
+</dom-module>
+<script src="challenge-settings-page.js"></script>

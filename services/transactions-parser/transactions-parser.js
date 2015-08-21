@@ -6,7 +6,7 @@
     },
     CalculateWeeklyAverage: function(startDay, category) {
       var transactionsPromise;
-      transactionsPromise = this.$.transactionsController.GetTransactions('Food and Drink');
+      transactionsPromise = this.$.transactionsController.GetTransactions(category);
       return transactionsPromise.then((function(_this) {
         return function(transactions) {
           var bankTransactionDictionary, i, len, minDate, transaction;
@@ -34,7 +34,7 @@
       try {
         for (i = 0, len = transactions.length; i < len; i++) {
           transaction = transactions[i];
-          transaction.attributes.timestamp = moment(transaction.attributes.timestamp).add(1, 'days');
+          transaction.attributes.timestamp = moment(transaction.attributes.timestamp).add(10, 'hours');
           transaction.attributes.category = transaction.attributes.category || ["UNCATEGORIZED"];
           transaction.attributes.objectId = transaction.id;
           parsed.push(transaction.attributes);

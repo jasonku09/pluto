@@ -1,44 +1,45 @@
 Polymer
   is: "login-page"
 
-  properties:
-    signup:
-      observer: '_onSignupChange'
-    loading:
-      observer: '_onLoadingChange'
-
+  _computeSignupHidden: (tab)->
+    return tab is 'Login'
 
   attached: ->
-    @signup = false
+    @selectedTab = "Login"
     @loading = false
     @error = false
     return
 
-  _onLoginTap: ->
+  _onButtonTap: ->
     return if not @_ValidateInputs()
+    if @selectedTab is 'Login'
+      @_Login()
+    else
+      @_Signup()
+    return
+
+  _Login: ->
     @loadingLabel = "Logging in"
     @loading = true
     promise = Parse.User.logIn(@email, @password)
-    promise.then @_onLoginSuccess.bind(this), @_onError.bind(this)
-    #@router.go "/home"
+    promise.then (success)=>
+      @_onSignupSuccess()
+    , @_onError.bind(this)
     return
 
-  _onSignupTap: ->
-    if !@signup
-      @signup = true
-      return
-    else
-      return if not @_ValidateInputs()
-      @loadingLabel = "Creating Account"
-      @loading = true
-      user = new Parse.User()
-      user.set "email", @email
-      user.set "username", @email
-      user.set "password", @password
-      user.set "nickname", @username
+  _Signup: ->
+    return if not @_ValidateInputs()
+    @loadingLabel = "Creating Account"
+    @loading = true
+    user = new Parse.User()
+    user.set "email", @email
+    user.set "username", @email
+    user.set "password", @password
 
-      promise = user.signUp(null)
-      promise.then @_onSignupSuccess.bind(this), @_onError.bind(this)
+    promise = user.signUp(null)
+    promise.then (success)=>
+      @$.signupConfirmationDialog.open()
+    , @_onError.bind(this)
     return
 
   _onCancelTap: ->
@@ -47,8 +48,12 @@ Polymer
 
   _ValidateInputs: ->
     inputs = [@$.emailInput, @$.passwordInput]
-    if @signup
-      inputs.push @$.usernameInput
+    if @selectedTab is 'Signup'
+      if @password != @passwordConfirm
+        @error = true
+        @errorMessage = "Oops, passwords do not match"
+        return
+      inputs.push @$.passwordInputConfirm
     for input in inputs
       if input.value.length is 0
         input.invalid = true
@@ -58,7 +63,13 @@ Polymer
     return true
 
   _onSignupSuccess: ->
-    @router.go "/home"
+    Challenge = Parse.Object.extend("Challenge")
+    query = new Parse.Query(Challenge)
+    query.equalTo 'userId', Parse.User.current().get('username')
+    query.first().then (challenge)=>
+      if !challenge
+        @router.go "/onboarding"
+      else @router.go "/home"
     return
 
   _onError: (error)->
@@ -69,30 +80,4 @@ Polymer
       when 203 then @errorMessage = "An account with that email already exists"
     @loading = false
     @error = true
-    return
-
-  _onLoginSuccess: ->
-    @router.go "/home"
-    return
-
-  # Change Listeners
-  _onSignupChange: ->
-    @loginError = false
-    if @signup
-      @$.signupCollapse.opened = true
-      @$.container.style.opacity = 1
-    else
-      @$.signupCollapse.opened = false
-      @$.container.style.opacity = 0
-    return
-
-  _onLoadingChange: ->
-    if @loading
-      @$.inputContainer.classList.add('hide')
-      @$.buttonContainer.classList.add('hide')
-      @$.loadingIndicator.classList.add('show')
-    else
-      @$.inputContainer.classList.remove('hide')
-      @$.buttonContainer.classList.remove('hide')
-      @$.loadingIndicator.classList.remove('show')
     return

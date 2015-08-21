@@ -10,6 +10,8 @@
 
     User.prototype.sessionToken = '';
 
+    User.prototype.onboarded = false;
+
     return User;
 
   })();
@@ -27,19 +29,39 @@
       }
     },
     _Initialize: function() {
-      var currentUser;
+      var currentUser, promise;
       currentUser = Parse.User.current();
       if (currentUser === null) {
         this.fire('ready');
       } else {
         user.loggedIn = true;
         this.UpdateUser();
-        this.fire('ready');
+        promise = this._CheckOnboarded();
+        promise.then((function(_this) {
+          return function(challenge) {
+            if (!challenge) {
+              user.onboarded = false;
+            } else {
+              user.onboarded = true;
+            }
+            return _this.fire('ready');
+          };
+        })(this));
       }
     },
     UpdateUser: function() {
       user.userId = Parse.User.current().get('username');
       user.sessionToken = Parse.User.current()._sessionToken;
+    },
+    _CheckOnboarded: function() {
+      var Challenge, query;
+      Challenge = Parse.Object.extend("Challenge");
+      query = new Parse.Query(Challenge);
+      query.equalTo('userId', user.userId);
+      return query.first();
+    },
+    IsOnboarded: function() {
+      return user.onboarded;
     },
     IsLoggedIn: function() {
       return user.loggedIn;

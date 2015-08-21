@@ -1,10 +1,9 @@
 (function() {
   Polymer({
     is: 'bank-accounts-controller',
-    attached: function() {
-      this.ajax = this.$.ajax;
+    ready: function() {
       if (PlutoMetadata.Environment === "Production") {
-        this.baseUrl = '';
+        this.baseUrl = 'https://pluto-io.appspot.com';
       } else {
         this.baseUrl = "http://localhost:3000";
       }
@@ -15,7 +14,7 @@
         authtoken: authToken,
         publictoken: publicToken
       });
-      return promise = this.ajax.send({
+      return promise = this.$.ajax.send({
         url: this.baseUrl + '/bankaccounts/add',
         method: 'POST',
         body: body,
@@ -25,13 +24,13 @@
     GetBankAccounts: function(authToken) {
       var accountsPromise, queryString;
       queryString = "authtoken=" + authToken;
-      return accountsPromise = this.ajax.send({
+      return accountsPromise = this.$.ajax.send({
         url: this.baseUrl + '/bankaccounts?' + queryString,
         method: 'GET'
       });
     },
     _onBankAccountsResponse: function() {
-      this.bankAccounts = this.ajax.lastResponse;
+      this.bankAccounts = this.$.ajax.lastResponse;
       this.$.bankAccountsStorage.save();
     },
     EncodeQueryData: function(data) {

@@ -7,7 +7,7 @@ var PlutoMetadata = {
     ClientID: "wyHN7j7ZM8b3sUeGBP6jVXwujNZbYS3roG52yoiX",
     Secret: "2d5bXrkFyNfWJj1LRgZeJj3gEWGVQZF71nP9ww1F"
   },
-  Environment: "Test"
+  Environment: "Production"
 };
 
 var PlutoEnums = {

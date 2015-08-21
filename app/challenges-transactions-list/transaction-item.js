@@ -6,6 +6,13 @@
         type: Number
       }
     },
+    _computeDateStyle: function(active) {
+      if (active) {
+        return 'background-color: #B3E1E4';
+      } else {
+        return '';
+      }
+    },
     _computeSwipeText: function(transaction) {
       if (transaction.category[0] === "Food and Drink") {
         return "Not Food";
@@ -21,6 +28,9 @@
       this.currentPosition = 0;
       this.$.item.style.marginLeft = '0';
       this.$.item.style.marginRight = '0';
+    },
+    _formatDate: function(transaction) {
+      return moment(transaction.timestamp).format('M/D');
     },
     _formatAmount: function(amount) {
       return amount.toFixed(2);
@@ -56,6 +66,11 @@
             };
           })(this), 400);
       }
+    },
+    _onDateTap: function() {
+      this.fire('date-change', {
+        objectId: this.transaction.objectId
+      });
     },
     _onCategorizeTap: function() {
       var newCategory;

@@ -2,6 +2,7 @@ class User
   loggedIn: false
   userId: ''
   sessionToken: ''
+  onboarded: false
 
 user = user || new User()
 
@@ -25,13 +26,26 @@ Polymer
     else
       user.loggedIn = true
       @UpdateUser()
-      @fire 'ready'
+      promise = @_CheckOnboarded()
+      promise.then (challenge)=>
+        if !challenge
+          user.onboarded = false
+        else user.onboarded = true
+        @fire 'ready'
       return
 
   UpdateUser: ->
     user.userId = Parse.User.current().get('username')
     user.sessionToken = Parse.User.current()._sessionToken
     return
+
+  _CheckOnboarded: ->
+    Challenge = Parse.Object.extend("Challenge")
+    query = new Parse.Query(Challenge)
+    query.equalTo 'userId', user.userId
+    query.first()
+
+  IsOnboarded: -> user.onboarded
 
   IsLoggedIn: -> user.loggedIn
 

@@ -7,6 +7,7 @@
 <link rel="import" href="../../app/pluto-chart/pluto-chart.html">
 <link rel="import" href="../../services/pluto-user/pluto-user.html">
 <link rel="import" href="../../controllers/bank-accounts-controller/bank-accounts-controller.html">
+<link rel="import" href="../../controllers/transactions-controller/transactions-controller.html">
 <link rel="import" href="../../app/pluto-loading-indicator/pluto-loading-indicator.html">
 
 <dom-module id="bank-accounts-page">
@@ -62,11 +63,18 @@
       name="parseFinish"
       value="{{parseFinish}}"></iron-localstorage>
 
+    <iron-localstorage
+      id="transactionsUpdatingStorage"
+      name="transactionsUpdating"
+      value="{{transactionsUpdating}}"></iron-localstorage>
+
     <bank-accounts-controller id="bankAccountsController"></bank-accounts-controller>
+    <transactions-controller id="transactionsController"></transactions-controller>
     <pluto-user id="user"></pluto-user>
 
-    <div class="vertical layout fit center" style="background-color:white">
-      <paper-item>Cash Accounts</paper-item>
+    <div class="vertical layout fit center" style="background-color:white; overflow:auto">
+      <p style="color: grey;font-size: 14px; margin:15px;width:80%">This will let you specify your challenge and track your progress automatically with Pluto</p>
+      <paper-item hidden$="[[_computeHeaderHidden(bankAccounts)]]">Cash Accounts</paper-item>
       <template is="dom-repeat" items="[[_getCashAccounts(bankAccounts)]]" as="account">
         <paper-item>
           <iron-icon icon="label" style$="[[_computeIconColor(bank.color)]]"></iron-icon>
@@ -75,10 +83,10 @@
         </paper-item>
       </template>
 
-      <paper-item>Credit Cards</paper-item>
+      <paper-item hidden$="[[_computeHeaderHidden(bankAccounts)]]">Credit Cards</paper-item>
       <template is="dom-repeat" items="[[_getCreditAccounts(bankAccounts)]]" as="account">
         <paper-item>
-          <iron-icon icon="label" style$="[[_computeIconColor(bank.color)]]"></iron-icon>
+          <iron-icon src="[[account.icon]]"></iron-icon>
           <div class="flex-3">[[_getAccountName(account)]]</div>
           <div class="money flex">[[_getAccountBalance(account)]]</div>
         </paper-item>
@@ -90,8 +98,10 @@
         <iron-icon icon="chevron-right"></iron-icon>
       </paper-item>
 
+
       <div class="vertical layout center center-justified flex" hidden$="[[_computeLoaderHidden(parseTimeRemaining, parseFinish)]]">
-        <div>Processing Transactions...</div>
+        <div>Processing transactions...</div>
+        <div>(This may take a few minutes)</div>
         <pluto-loading-indicator type="spinner"></pluto-loading-indicator>
       </div>
     </div>

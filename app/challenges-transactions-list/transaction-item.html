@@ -21,13 +21,13 @@
       width: 100px;
       height: 100%;
       background-color: #9ad7db;
-      position:absolute;
+      position:fixed;
       right: 0;
       z-index: 0;
       color: white;
     }
     paper-item-body{
-      z-index: 1;
+      z-index: 12;
       padding: 0 16px 0 16px;
       width: 100%;
       background-color: white;
@@ -35,16 +35,26 @@
     .transition{
       -webkit-transition: all 0.4s ease;
     }
+    .date-container{
+      border-radius: 50%;
+      background-color: #999999;
+      color: white;
+      margin-right: 10px;
+      width: 40px;
+      height: 40px;
+    }
   </style>
   <template>
     <paper-item>
       <paper-item-body id="item" on-track="_handleTrack" two-line>
-        <div class="horizontal layout center">
-          <div class="vertical layout"></div>
+        <div class="horizontal layout center" style="z-index: 3">
+          <div class="date-container vertical layout center center-justified"
+               style$="[[_computeDateStyle(transaction.active)]]"
+               on-tap="_onDateTap">[[_formatDate(transaction)]]</div>
+          <div class="vertical layout" style="width: 65%">
             <div class="name">[[transaction.name]]</div>
             <div secondary>[[transaction.category.0]]</div>
           </div>
-          <div class="flex"></div>
           <div>[[_formatAmount(transaction.amount)]]</div>
         </div>
       </paper-item-body>

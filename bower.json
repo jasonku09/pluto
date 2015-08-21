@@ -18,6 +18,10 @@
     "chartjs": "~1.0.2",
     "iron-list": "polymerelements/iron-list#~1.0.2",
     "moment": "~2.10.6",
-    "paper-progress": "polymerelements/paper-progress#1.0.2"
+    "paper-progress": "polymerelements/paper-progress#1.0.2",
+    "polymer-paper-datepicker": "~1.0.3"
+  },
+  "resolutions": {
+    "moment": "~2.10.6"
   }
 }

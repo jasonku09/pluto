@@ -81,7 +81,12 @@
       var appPath = document.location.pathname;
 
       if(this.$.user.IsLoggedIn()){
-        window.location.href = appPath + "#/home"
+        if(!this.$.user.IsOnboarded()){
+          window.location.href = appPath + '#/onboarding'
+        }
+        else{
+          window.location.href = appPath + "#/home"
+        }
       }
       else{
         window.location.href = appPath + "#/login"

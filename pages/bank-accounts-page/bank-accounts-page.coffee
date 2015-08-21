@@ -9,6 +9,10 @@ Polymer
     ready:
       notify: true
 
+  _computeHeaderHidden: (bankAccounts)->
+    return false if !bankAccounts
+    return true
+
   _computeLoaderHidden: (parseTimeRemaining, parseFinish)-> !moment().isBefore(@parseFinish)
 
   _computeProgressValue: (parseTimeRemaining)->
@@ -45,18 +49,25 @@ Polymer
     @ready = false
     @_createPlaidLink()
     @_timer()
+    @_getBankAccounts()
     @bankAccounts = @bankAccounts || []
-    if @bankAccounts.length > 0 && moment().isAfter(@parseFinish)
-      @ready = true
     return
 
-  _onRefreshTap: ->
-    banksPromise = @$.bankAccountsController.GetBankAccounts(@$.user.GetSessionToken())
+  _getBankAccounts: ->
+    banksPromise = @$.bankAccountsController.GetBankAccounts(Parse.User.current()._sessionToken)
     self = @
     banksPromise.then (banks)->
       bankaccounts = []
       for bank in banks
         for account in bank.accounts
+          switch account.institution_type
+            when "amex" then account.icon = "../../resources/icons/amex.png"
+            when "bofa" then account.icon = "../../resources/icons/bofa.png"
+            when "chase" then account.icon = "../../resources/icons/chase.png"
+            when "citi" then account.icon = "../../resources/icons/citi.jpg"
+            when "usaa" then account.icon = "../../resources/icons/usaa.jpg"
+            when "us" then account.icon = "../../resources/icons/usbank.png"
+            when "wells" then account.icon = "../../resources/icons/wellsfargo.jpg.png"
           bankaccounts.push account
 
       self.bankAccounts = bankaccounts
@@ -68,14 +79,12 @@ Polymer
     return
 
   _addBankAccount: (token)->
-    if PlutoMetadata.Environment is "Test"
-      promise = @$.bankAccountsController.AddBankAccount(@$.user.GetSessionToken(), token)
-      self = this
-      promise.then ->
-        self._startParseTimer()
-        self._onRefreshTap()
-        return
-    return
+    promise = @$.bankAccountsController.AddBankAccount(Parse.User.current()._sessionToken, token)
+    promise.then =>
+      @transactionsUpdating = @transactionsUpdating + 1 || 1
+      @_startParseTimer()
+      @_getBankAccounts()
+      return
 
   _createPlaidLink: ->
     environment = ''
@@ -88,7 +97,7 @@ Polymer
         environment = "tartan"
         key = "20f7a7d661059ee02a9f9825c7767a"
       when "Production"
-        environment = "production"
+        environment = "tartan"
         key = "20f7a7d661059ee02a9f9825c7767a"
 
     @PlaidLink = Plaid.create
@@ -109,13 +118,37 @@ Polymer
 
   _timer: ->
     setTimeout =>
-      @parseTimeRemaining = moment(@parseFinish).diff(moment(), 'seconds')
-      if @parseTimeRemaining < 0
-        @ready = true
+      @parseTimeRemaining = moment(@parseFinish).diff(moment(), 'seconds') || 0
+      if @parseTimeRemaining <= 0
+        if @transactionsUpdating > 0
+          alert("Updating Transactions...")
+          promise = @$.transactionsController.UpdateTransactions(Parse.User.current()._sessionToken)
+          promise.then ()=>
+            @transactionsUpdating--
+            if @transactionsUpdating is 0
+              @ready = true
+            return
+          , (error)=>
+            @transactionsUpdating--
+            if @transactionsUpdating is 0
+              setTimeout =>
+                @ready = true
+              , 60000
+            return
+        else
+          @ready = true
         return
       @_timer()
       return
     , 1000
+    return
+
+  _updateTransactions: ->
+    promise = @$.transactionsController.UpdateTransactions(Parse.User.current()._sessionToken)
+    promise.then ()->
+      alert 'success'
+    , (error)->
+      alert 'error' + error
 
   _onAddTap: ->
     @PlaidLink.open()

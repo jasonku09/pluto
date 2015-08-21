@@ -7,7 +7,7 @@ Polymer
 
   # Gets the weekly average spending between startDay(1-7) and sunday
   CalculateWeeklyAverage: (startDay, category)->
-    transactionsPromise = @$.transactionsController.GetTransactions('Food and Drink')
+    transactionsPromise = @$.transactionsController.GetTransactions(category)
     transactionsPromise.then (transactions)=>
       transactions = @Parse transactions
       bankTransactionDictionary = {}
@@ -24,7 +24,7 @@ Polymer
     parsed = []
     try
       for transaction in transactions
-        transaction.attributes.timestamp = moment(transaction.attributes.timestamp).add(1, 'days')
+        transaction.attributes.timestamp = moment(transaction.attributes.timestamp).add(10, 'hours')
         transaction.attributes.category = transaction.attributes.category || ["UNCATEGORIZED"]
         transaction.attributes.objectId = transaction.id
         parsed.push transaction.attributes

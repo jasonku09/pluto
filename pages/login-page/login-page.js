@@ -1,48 +1,52 @@
 (function() {
   Polymer({
     is: "login-page",
-    properties: {
-      signup: {
-        observer: '_onSignupChange'
-      },
-      loading: {
-        observer: '_onLoadingChange'
-      }
+    _computeSignupHidden: function(tab) {
+      return tab === 'Login';
     },
     attached: function() {
-      this.signup = false;
+      this.selectedTab = "Login";
       this.loading = false;
       this.error = false;
     },
-    _onLoginTap: function() {
-      var promise;
+    _onButtonTap: function() {
       if (!this._ValidateInputs()) {
         return;
       }
+      if (this.selectedTab === 'Login') {
+        this._Login();
+      } else {
+        this._Signup();
+      }
+    },
+    _Login: function() {
+      var promise;
       this.loadingLabel = "Logging in";
       this.loading = true;
       promise = Parse.User.logIn(this.email, this.password);
-      promise.then(this._onLoginSuccess.bind(this), this._onError.bind(this));
+      promise.then((function(_this) {
+        return function(success) {
+          return _this._onSignupSuccess();
+        };
+      })(this), this._onError.bind(this));
     },
-    _onSignupTap: function() {
+    _Signup: function() {
       var promise, user;
-      if (!this.signup) {
-        this.signup = true;
+      if (!this._ValidateInputs()) {
         return;
-      } else {
-        if (!this._ValidateInputs()) {
-          return;
-        }
-        this.loadingLabel = "Creating Account";
-        this.loading = true;
-        user = new Parse.User();
-        user.set("email", this.email);
-        user.set("username", this.email);
-        user.set("password", this.password);
-        user.set("nickname", this.username);
-        promise = user.signUp(null);
-        promise.then(this._onSignupSuccess.bind(this), this._onError.bind(this));
       }
+      this.loadingLabel = "Creating Account";
+      this.loading = true;
+      user = new Parse.User();
+      user.set("email", this.email);
+      user.set("username", this.email);
+      user.set("password", this.password);
+      promise = user.signUp(null);
+      promise.then((function(_this) {
+        return function(success) {
+          return _this.$.signupConfirmationDialog.open();
+        };
+      })(this), this._onError.bind(this));
     },
     _onCancelTap: function() {
       this.signup = false;
@@ -50,8 +54,13 @@
     _ValidateInputs: function() {
       var i, input, inputs, len;
       inputs = [this.$.emailInput, this.$.passwordInput];
-      if (this.signup) {
-        inputs.push(this.$.usernameInput);
+      if (this.selectedTab === 'Signup') {
+        if (this.password !== this.passwordConfirm) {
+          this.error = true;
+          this.errorMessage = "Oops, passwords do not match";
+          return;
+        }
+        inputs.push(this.$.passwordInputConfirm);
       }
       for (i = 0, len = inputs.length; i < len; i++) {
         input = inputs[i];
@@ -66,7 +75,19 @@
       return true;
     },
     _onSignupSuccess: function() {
-      this.router.go("/home");
+      var Challenge, query;
+      Challenge = Parse.Object.extend("Challenge");
+      query = new Parse.Query(Challenge);
+      query.equalTo('userId', Parse.User.current().get('username'));
+      query.first().then((function(_this) {
+        return function(challenge) {
+          if (!challenge) {
+            return _this.router.go("/onboarding");
+          } else {
+            return _this.router.go("/home");
+          }
+        };
+      })(this));
     },
     _onError: function(error) {
       switch (error.code) {
@@ -84,30 +105,6 @@
       }
       this.loading = false;
       this.error = true;
-    },
-    _onLoginSuccess: function() {
-      this.router.go("/home");
-    },
-    _onSignupChange: function() {
-      this.loginError = false;
-      if (this.signup) {
-        this.$.signupCollapse.opened = true;
-        this.$.container.style.opacity = 1;
-      } else {
-        this.$.signupCollapse.opened = false;
-        this.$.container.style.opacity = 0;
-      }
-    },
-    _onLoadingChange: function() {
-      if (this.loading) {
-        this.$.inputContainer.classList.add('hide');
-        this.$.buttonContainer.classList.add('hide');
-        this.$.loadingIndicator.classList.add('show');
-      } else {
-        this.$.inputContainer.classList.remove('hide');
-        this.$.buttonContainer.classList.remove('hide');
-        this.$.loadingIndicator.classList.remove('show');
-      }
     }
   });
 

@@ -1,8 +1,29 @@
 (function() {
   Polymer({
     is: 'transactions-controller',
-    attached: function() {
-      this.ajax = this.$.ajax;
+    ready: function() {
+      if (PlutoMetadata.Environment === "Production") {
+        this.baseUrl = 'https://pluto-io.appspot.com';
+      } else {
+        this.baseUrl = "http://localhost:3000";
+      }
+    },
+    UpdateTimestamp: function(transactionId, newTimestamp) {
+      var Transaction, query;
+      Transaction = Parse.Object.extend("Transaction");
+      query = new Parse.Query(Transaction);
+      return query.get(transactionId).then(function(transaction) {
+        transaction.set('timestamp', new Date(newTimestamp));
+        transaction.save();
+      });
+    },
+    UpdateTransactions: function(authToken) {
+      var accountsPromise, queryString;
+      queryString = "authtoken=" + authToken;
+      return accountsPromise = this.$.ajax.send({
+        url: this.baseUrl + '/transactions/update?' + queryString,
+        method: 'GET'
+      });
     },
     UpdateCategory: function(transactionId, newCategory) {
       var Transaction, query;

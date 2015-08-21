@@ -5,35 +5,49 @@
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 
 <link rel="import" href="../../app/challenges-transactions-list/challenges-transactions-list.html">
-<link rel="import" href="../../services/transactions-parser/transactions-parser.coffee">
+<link rel="import" href="../../controllers/transactions-controller/transactions-controller.html">
 <link rel="import" href="../../app/pluto-chart/pluto-chart.html">
+<link rel="import" href="../../services/pluto-user/pluto-user.html">
+<link rel="import" href="../../services/transactions-parser/transactions-parser.coffee">
 
 <dom-module id="challenges-page">
   <link rel="import" type="css" href="challenges-page.css">
   <template>
+    <pluto-user id="user"></pluto-user>
+    <transactions-controller id="transactionsController"></transactions-controller>
     <transactions-parser id="transactionsParser"></transactions-parser>
-    <div class="vertical layout fit center">
+    <div class="vertical layout fit center unresolved">
 
       <!-- Header -->
       <paper-item>
+        <iron-icon icon="arrow-back" hidden$="[[!viewTransactions]]" on-tap="_onBackTap"
+                   style="position: fixed;top: 90px;left: 18px;"></iron-icon>
         <paper-item-body two-line class="vertical layout center">
-          <div style="font-size: 27px; margin-bottom: 10px; margin-top: 15px;">Week 1</div>
-          <div style="font-size: 12px" secondary>AUGUST 3-9, 2015</div>
+          <div style="font-size: 20px; margin-bottom: 10px; margin-top: 15px;">SAVE ON FOOD & DRINK</div>
+          <div style="font-size: 12px" secondary>[[_formatDate(currentChallenge)]]</div>
         </paper-item-body>
       </paper-item>
 
       <!-- Spendable -->
-      <div class="vertical layout center center-justified spendable-container">
-        <div class="vertical layout center center-justified big-circle">
-          <div>$48</div>
-          <div secondary>Remaining this week</div>
+      <div class="vertical layout center center-justified flex" style="width: 100%" hidden$="[[viewTransactions]]">
+        <div class="vertical layout center center-justified spendable-container flex">
+          <div class="vertical layout center center-justified big-circle">
+            <div style="font-size: 17px">[[_computeDayCounter(currentChallenge)]]</div>
+            <div style="margin:15px">$<span>[[_calculateSpendable(spent)]]</span></div>
+            <div secondary>[[_computeSavedText(currentChallenge)]]</div>
+          </div>
+          <!--<pluto-chart id="chart" chart-width="425" chart-height="200" type="line" data="[[chartData]]" options="[[chartOptions]]"></pluto-chart>-->
         </div>
-        <!--<pluto-chart id="chart" chart-width="425" chart-height="200" type="line" data="[[chartData]]" options="[[chartOptions]]"></pluto-chart>-->
+        <paper-item class="vertical layout center">You're killing it! Keep it up.</paper-item>
+        <div class="horizontal layout" style="width: 100%; height: 70px">
+          <paper-button class="flex" on-tap="_ViewTransactions">Transactions</paper-button>
+          <paper-button class="flex">Insights</paper-button>
+        </div>
       </div>
-      <div>Projected to save this week: $65.32</div>
 
-      <!-- Transaction List -->
-      <challenges-transactions-list on-change-success="_onChangeSuccess"></challenges-transactions-list>
+      <challenges-transactions-list hidden$="[[!viewTransactions]]" id="transactionsList"
+                                    on-change-success="_onChangeSuccess"
+                                    spent="{{spent}}"></challenges-transactions-list>
 
       <paper-toast id="successToast" duration="1000">Change Successful!</paper-toast>
 

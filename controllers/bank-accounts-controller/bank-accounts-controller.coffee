@@ -1,10 +1,9 @@
 Polymer
   is: 'bank-accounts-controller'
 
-  attached: ->
-    @ajax = @$.ajax
+  ready: ->
     if PlutoMetadata.Environment is "Production"
-      @baseUrl = ''
+      @baseUrl = 'https://pluto-io.appspot.com'
     else @baseUrl = "http://localhost:3000"
     return
 
@@ -13,7 +12,7 @@ Polymer
       authtoken: authToken
       publictoken: publicToken
     }
-    promise = @ajax.send
+    promise = @$.ajax.send
       url: @baseUrl + '/bankaccounts/add'
       method: 'POST'
       body: body
@@ -21,12 +20,12 @@ Polymer
 
   GetBankAccounts: (authToken)->
     queryString = "authtoken=" + authToken
-    accountsPromise = @ajax.send
+    accountsPromise = @$.ajax.send
       url: @baseUrl + '/bankaccounts?' + queryString
       method: 'GET'
 
   _onBankAccountsResponse: ->
-    @bankAccounts = @ajax.lastResponse
+    @bankAccounts = @$.ajax.lastResponse
     @$.bankAccountsStorage.save()
     return
 

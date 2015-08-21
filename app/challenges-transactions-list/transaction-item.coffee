@@ -5,6 +5,11 @@ Polymer
     currentPosition:
       type: Number
 
+  _computeDateStyle: (active)->
+    if active
+      return 'background-color: #B3E1E4'
+    else return ''
+
   _computeSwipeText: (transaction)->
     if transaction.category[0] is "Food and Drink"
       return "Not Food"
@@ -20,6 +25,9 @@ Polymer
     @$.item.style.marginLeft = '0'
     @$.item.style.marginRight = '0'
     return
+
+  _formatDate: (transaction)->
+    return moment(transaction.timestamp).format('M/D')
 
   _formatAmount: (amount)->
     return amount.toFixed(2)
@@ -47,6 +55,10 @@ Polymer
         setTimeout =>
           @$.item.classList.remove 'transition'
         , 400
+    return
+
+  _onDateTap: ->
+    @fire 'date-change', {objectId: @transaction.objectId}
     return
 
   _onCategorizeTap: ->

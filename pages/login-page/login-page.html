@@ -2,59 +2,79 @@
 <link rel="import" href="../../bower_components/paper-item/paper-item.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/gold-email-input/gold-email-input.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 
+<link rel="import" href="../../app/pluto-confirmation-dialog/pluto-confirmation-dialog.html">
 <link rel="import" href="../../app/pluto-loading-indicator/pluto-loading-indicator.html">
+<link rel="import" href="../../services/pluto-user/pluto-user.html">
 
 <dom-module id="login-page">
   <link rel="import" type="css" href="login-page.css">
   <style>
     :host {
       display: block;
-      --paper-input-container-color: rgb(241, 241, 241);
+      --paper-input-container-color: #979797;
       --paper-input-container-focus-color: rgb(199, 254, 246);
       --paper-input-container-input-color: white;
       --paper-input-container-invalid-color: rgb(241, 58, 58);
     }
+    paper-dialog{
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: 100;
+      border-radius: 10px;
+      text-align: center;
+    }
   </style>
   <template>
-    <div class="vertical layout fit main center center-justified">
-      <paper-item>
-        <div id="logo">pluto</div>
-      </paper-item>
+    <pluto-user id="user"></pluto-user>
 
-      <!-- Input Fields -->
-      <div id="inputContainer" class="vertical layout center center-justified">
-        <paper-item>
-          <iron-icon icon="mail"></iron-icon>
-          <gold-email-input id="emailInput" label="email" value="{{email}}" error-message="invalid email"></gold-email-input>
-        </paper-item>
-        <paper-item>
-          <iron-icon icon="https"></iron-icon>
-          <paper-input id="passwordInput" label="password" value="{{password}}" type="password"></paper-input>
-        </paper-item>
-        <iron-collapse id="signupCollapse">
+    <pluto-confirmation-dialog id="signupConfirmationDialog"
+                              message="Your Pluto account has been created!"
+                              on-close="_onSignupSuccess"></pluto-confirmation-dialog>
+
+    <div class="vertical layout fit main center">
+      <div class="fit" style="background-color: rgba(74, 73, 73, 0.86); z-index:1"></div>
+      <img class="fit" style="left:-150px" src="../../login-background.jpg">
+      <div class="vertical layout center center-justified" style="height: 30%">
+        <div id="logo" >pluto</div>
+      </div>
+
+      <div id="inputContainer" class="vertical layout flex center" hidden$=[[loading]] style="z-index: 5">
+        <paper-tabs selected="{{selectedTab}}" attr-for-selected="name">
+          <paper-tab name="Login">LOGIN</paper-tab>
+          <paper-tab name="Signup">SIGN UP</paper-tab>
+        </paper-tabs>
+        <!-- Input Fields -->
+        <gold-email-input id="emailInput" label="E-MAIL" value="{{email}}" error-message="invalid email" always-float-label style="margin-top: 25px"></gold-email-input>
+        <paper-input id="passwordInput" label="PASSWORD" value="{{password}}" type="password" always-float-label></paper-input>
+        <paper-input hidden$="[[_computeSignupHidden(selectedTab)]]"
+                     id="passwordInputConfirm"
+                     label="CONFIRM PASSWORD"
+                     value="{{passwordConfirm}}"
+                     type="password" always-float-label></paper-input>
+        <paper-item class="error-label" hidden$="[[!error]]">[[errorMessage]]</paper-item>
+        <!--<iron-collapse id="signupCollapse">
           <div id="container" class="vertical layout center center-justified">
             <paper-item >
               <iron-icon icon="face"></iron-icon>
               <paper-input id="usernameInput" label="username" value="{{username}}"></paper-input>
             </paper-item>
           </div>
-        </iron-collapse>
-        <paper-item class="error-label" hidden$="[[!error]]">[[errorMessage]]</paper-item>
+        </iron-collapse>-->
       </div>
 
       <!-- Button Group -->
-      <div class="button-group vertical layout" id="buttonContainer">
-        <paper-button hidden$="[[signup]]" on-tap="_onLoginTap" >Login</paper-button>
-        <paper-button on-tap="_onSignupTap" >Signup</paper-button>
-        <paper-button hidden$="[[!signup]]" on-tap="_onCancelTap" >Cancel</paper-button>
+      <div class="vertical layout center center-justified" id="buttonContainer" hidden$=[[loading]] style="height: 20%">
+        <paper-button on-tap="_onButtonTap" >[[selectedTab]]</paper-button>
       </div>
-
+      <div class="flex" hidden$=[[!loading]]></div>
       <div class="vertical layout fit center center-justified" hidden$=[[!loading]]>
-      <pluto-loading-indicator id="loadingIndicator" label="[[loadingLabel]]" type="nucleus"></pluto-loading-indicator>
+        <pluto-loading-indicator id="loadingIndicator" label="[[loadingLabel]]" type="nucleus"></pluto-loading-indicator>
       </div>
     </div>
   </template>

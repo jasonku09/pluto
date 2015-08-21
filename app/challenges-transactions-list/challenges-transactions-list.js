@@ -5,14 +5,23 @@
       transactionsFilter: {
         type: String,
         observer: '_onFilterChange'
+      },
+      spent: {
+        notify: true
       }
     },
     attached: function() {
-      var promise;
       this.transactionsController = this.$.transactionsController;
       this.transactionsParser = this.$.transactionsParser;
-      promise = this.transactionsController.GetTransactions(null, moment().weekday(1).subtract(14, 'days'), moment().weekday(7).subtract(14, 'days'));
-      promise.then((function(_this) {
+    },
+    GetTransactions: function(min, max) {
+      var promise;
+      this.min = moment(min);
+      this.max = moment(max);
+      min = moment(min).weekday(0).subtract(4, 'days');
+      max = moment(max).weekday(7).add(4, 'days');
+      promise = this.transactionsController.GetTransactions(null, min, max);
+      return promise.then((function(_this) {
         return function(transactions) {
           _this.transactions = _this.transactionsParser.Parse(transactions);
           return _this.FilterTransactions();
@@ -20,7 +29,6 @@
       })(this), function(error) {
         return alert(error);
       });
-      this.transactionsFilter = 'food';
     },
     FilterTransactions: function() {
       var food, i, len, other, ref, transaction;
@@ -32,12 +40,18 @@
       ref = this.transactions;
       for (i = 0, len = ref.length; i < len; i++) {
         transaction = ref[i];
+        if (moment(transaction.timestamp).isBetween(moment(this.min).subtract(1, 'days'), moment(this.max).add(1, 'days'), 'day')) {
+          transaction.active = true;
+        } else {
+          transaction.active = false;
+        }
         if (transaction.category.indexOf('Food and Drink') > -1) {
           food.push(transaction);
         } else {
           other.push(transaction);
         }
       }
+      this._caluclateSpent(food);
       if (this.transactionsFilter === 'food') {
         this.filteredTransactions = food;
       } else {
@@ -66,21 +80,48 @@
     _onOtherTap: function() {
       this.transactionsFilter = 'all';
     },
-    _onCategoryChange: function(e) {
-      var i, len, promise, ref, self, transaction;
-      ref = this.transactions;
-      for (i = 0, len = ref.length; i < len; i++) {
-        transaction = ref[i];
-        if (transaction.objectId === e.detail.objectId) {
-          transaction.category = e.detail.newCategory;
+    _caluclateSpent: function(foodArray) {
+      var i, item, len, total;
+      if (foodArray.length === 0) {
+        this.spent = 0;
+      } else {
+        total = 0;
+        for (i = 0, len = foodArray.length; i < len; i++) {
+          item = foodArray[i];
+          if (item.active) {
+            total += item.amount;
+          }
         }
+        this.spent = total.toFixed(2);
       }
+    },
+    _onDateChange: function(e) {
+      this.$.datePicker.open();
+      this.selectedTransaction = e.detail.objectId;
+    },
+    _onCancelTap: function() {
+      this.$.datePicker.close();
+    },
+    _onDateConfirm: function() {
+      var promise;
+      this.$.datePicker.close();
+      promise = this.transactionsController.UpdateTimestamp(this.selectedTransaction, this.selectedDate);
+      promise.then((function(_this) {
+        return function(success) {
+          _this.GetTransactions(_this.min, _this.max);
+          return _this.fire('change-success');
+        };
+      })(this));
+    },
+    _onCategoryChange: function(e) {
+      var promise;
       promise = this.transactionsController.UpdateCategory(e.detail.objectId, e.detail.newCategory);
-      self = this;
-      promise.then(function(success) {
-        self.FilterTransactions();
-        return self.fire('change-success');
-      });
+      promise.then((function(_this) {
+        return function(success) {
+          _this.GetTransactions(_this.min, _this.max);
+          return _this.fire('change-success');
+        };
+      })(this));
     }
   });
 
