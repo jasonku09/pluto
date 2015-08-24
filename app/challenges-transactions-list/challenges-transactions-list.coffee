@@ -9,9 +9,22 @@ Polymer
       notify: true
 
   attached: ->
+    @refreshing = false
     @transactionsController = @$.transactionsController
     @transactionsParser = @$.transactionsParser
+    @UpdateTransactions()
     return
+
+  UpdateTransactions: (force)->
+    User = Parse.Object.extend("User")
+    query = new Parse.Query(User)
+    query.equalTo('objectId', Parse.User.current().id)
+    query.find().then (results)=>
+      lastUpdate = results[0].attributes.lastTransactionsUpdate
+      if moment(lastUpdate).isBefore(moment(), 'day') || force
+        @$.transactionsController.UpdateTransactions(Parse.User.current()._sessionToken, moment(lastUpdate).subtract(30, 'days').format('M/D/YYYY'))
+      results[0].set('lastTransactionsUpdate', new Date())
+      results[0].save()
 
   GetTransactions: (min, max)->
     @min = moment(min)
@@ -55,6 +68,14 @@ Polymer
     @FilterTransactions()
     return
 
+  _onRefreshTap: ->
+    @refreshing = true
+    promise = @UpdateTransactions(true)
+    promise.then ()=>
+      @refreshing = false
+      return
+
+
   _onFoodTap: ->
     @transactionsFilter = 'food'
     return
@@ -64,6 +85,7 @@ Polymer
     return
 
   _caluclateSpent: (foodArray)->
+    @spent = null
     if foodArray.length is 0
       @spent = 0
     else

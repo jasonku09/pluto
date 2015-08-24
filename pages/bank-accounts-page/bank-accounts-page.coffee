@@ -155,6 +155,5 @@ Polymer
     return
 
   _onBackTap: ->
-    @router.go '/home',
-      data:
-        accounts: @bankAccounts
+    @router.go '/home'
+    return

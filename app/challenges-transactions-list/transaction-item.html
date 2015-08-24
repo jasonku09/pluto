@@ -20,17 +20,18 @@
     .delete{
       width: 100px;
       height: 100%;
-      background-color: #9ad7db;
-      position:fixed;
+      background-color: var(--primary-color);
+      position:absolute;
+      top:0;
       right: 0;
-      z-index: 0;
+      z-index: 1;
       color: white;
     }
-    paper-item-body{
-      z-index: 12;
-      padding: 0 16px 0 16px;
+    #item{
+      z-index: 100;
       width: 100%;
-      background-color: white;
+      background: white;
+      position:relative
     }
     .transition{
       -webkit-transition: all 0.4s ease;
@@ -43,23 +44,27 @@
       width: 40px;
       height: 40px;
     }
+    div[secondary]{
+      color:grey;
+      font-size:14px;
+    }
   </style>
   <template>
-    <paper-item>
-      <paper-item-body id="item" on-track="_handleTrack" two-line>
-        <div class="horizontal layout center" style="z-index: 3">
+    <div style="position:relative;">
+      <div id="item" on-track="_handleTrack">
+        <div class="horizontal layout center" style=" padding: 14px;">
           <div class="date-container vertical layout center center-justified"
                style$="[[_computeDateStyle(transaction.active)]]"
                on-tap="_onDateTap">[[_formatDate(transaction)]]</div>
-          <div class="vertical layout" style="width: 65%">
+          <div class="vertical layout" style="width: 65%;">
             <div class="name">[[transaction.name]]</div>
             <div secondary>[[transaction.category.0]]</div>
           </div>
           <div>[[_formatAmount(transaction.amount)]]</div>
         </div>
-      </paper-item-body>
+      </div>
       <div class="delete vertical layout center center-justified" on-tap="_onCategorizeTap">[[_computeSwipeText(transaction)]]</div>
-    </paper-item>
+    </div>
   </template>
 </dom-module>
 <script src="transaction-item.js"></script>

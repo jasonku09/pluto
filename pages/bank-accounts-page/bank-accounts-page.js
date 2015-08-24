@@ -206,11 +206,7 @@
       this.PlaidLink.open();
     },
     _onBackTap: function() {
-      return this.router.go('/home', {
-        data: {
-          accounts: this.bankAccounts
-        }
-      });
+      this.router.go('/home');
     }
   });
 

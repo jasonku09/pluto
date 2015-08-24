@@ -30,7 +30,7 @@ Polymer
     return moment(transaction.timestamp).format('M/D')
 
   _formatAmount: (amount)->
-    return amount.toFixed(2)
+    return '$' + amount.toFixed(2)
 
   _handleTrack: (e)->
     switch e.detail.state
@@ -38,12 +38,9 @@ Polymer
         console.log 'tracking started!'
       when 'track'
         newPosition = @currentPosition + e.detail.ddx
-        if newPosition > 0
-          return
-        else
-          @$.item.style.marginLeft = newPosition + 'px'
-          @$.item.style.marginRight = -newPosition + 'px'
-          @currentPosition = newPosition
+        @$.item.style.marginLeft = newPosition + 'px'
+        @$.item.style.marginRight = -newPosition + 'px'
+        @currentPosition = newPosition
       when 'end'
         @$.item.classList.add 'transition'
         if @currentPosition < -50

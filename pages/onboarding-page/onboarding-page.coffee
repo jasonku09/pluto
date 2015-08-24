@@ -46,25 +46,9 @@ Polymer
       @$.challengeSettingsPage.CalculateWeeklyAverage()
 
     else if @selectedPage is 2
-      Challenge = Parse.Object.extend("Challenge")
-      newChallenge = new Challenge()
-      newACL = {}
-      newACL[Parse.User.current().id] = {
-        "read": true
-        "write": true
-      }
-      newChallenge.setACL newACL
-      if moment().weekday() is 0
-        startDay = 7
-      else startDay = moment().weekday()
-      promise = newChallenge.save
-        week: new Date(moment().weekday(1))
-        max_spend: @selectedChallenge.maxSpend
-        average_spending: @selectedChallenge.averageSpending
-        save_percentage: @selectedChallenge.savePercentage
-        start_day: startDay
-        userId: Parse.User.current().get('username')
-        status: 'In Progress'
+      promise = @$.challengesController.CreateNewChallenge @selectedChallenge.maxSpend,
+        @selectedChallenge.averageSpending,
+        @selectedChallenge.savePercentage
       promise.then ()=>
         @$.confirmationDialog.open()
         return

@@ -10,6 +10,7 @@
 <link rel="import" href="../../controllers/transactions-controller/transactions-controller.html">
 <link rel="import" href="../../app/pluto-loading-indicator/pluto-loading-indicator.html">
 
+<script src="https://cdn.plaid.com/link/stable/link-initialize.js"></script>
 <dom-module id="bank-accounts-page">
   <style>
     :host{
@@ -73,6 +74,13 @@
     <pluto-user id="user"></pluto-user>
 
     <div class="vertical layout fit center" style="background-color:white; overflow:auto">
+
+      <div id="infoBar" hidden$="[[compactMode]]"></div>
+      <paper-toolbar hidden$="[[compactMode]]" style="width: 100%; background-color: #FFFFFF; color: black;">
+        <iron-icon on-tap="_onBackTap" icon="arrow-back" style="margin-right: 100px"></iron-icon>
+        <div>Bank Accounts</div>
+      </paper-toolbar>
+
       <p style="color: grey;font-size: 14px; margin:15px;width:80%">This will let you specify your challenge and track your progress automatically with Pluto</p>
       <paper-item hidden$="[[_computeHeaderHidden(bankAccounts)]]">Cash Accounts</paper-item>
       <template is="dom-repeat" items="[[_getCashAccounts(bankAccounts)]]" as="account">

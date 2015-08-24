@@ -33,7 +33,7 @@
       return moment(transaction.timestamp).format('M/D');
     },
     _formatAmount: function(amount) {
-      return amount.toFixed(2);
+      return '$' + amount.toFixed(2);
     },
     _handleTrack: function(e) {
       var newPosition;
@@ -43,13 +43,9 @@
           break;
         case 'track':
           newPosition = this.currentPosition + e.detail.ddx;
-          if (newPosition > 0) {
-            return;
-          } else {
-            this.$.item.style.marginLeft = newPosition + 'px';
-            this.$.item.style.marginRight = -newPosition + 'px';
-            this.currentPosition = newPosition;
-          }
+          this.$.item.style.marginLeft = newPosition + 'px';
+          this.$.item.style.marginRight = -newPosition + 'px';
+          this.currentPosition = newPosition;
           break;
         case 'end':
           this.$.item.classList.add('transition');

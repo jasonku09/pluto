@@ -11,10 +11,12 @@
 <link rel="import" href="../../app/pluto-confirmation-dialog/pluto-confirmation-dialog.html">
 <link rel="import" href="../../pages/bank-accounts-page/bank-accounts-page.html">
 <link rel="import" href="../../pages/challenge-settings-page/challenge-settings-page.html">
+<link rel="import" href="../../controllers/challenges-controller/challenges-controller.html">
 
 <dom-module id="onboarding-page">
   <link rel="import" type="css" href="onboarding-page.css">
   <template>
+    <challenges-controller id="challengesController"></challenges-controller>
 
     <div class="fit vertical layout">
       <div id="infoBar"></div>
@@ -49,7 +51,7 @@
               <div class="flex"></div>
             </div>
 
-            <bank-accounts-page ready="{{bankAccountsReady}}" bank-accounts="{{bankAccounts}}"></bank-accounts-page>
+            <bank-accounts-page ready="{{bankAccountsReady}}" bank-accounts="{{bankAccounts}}" compact-mode="true"></bank-accounts-page>
 
             <challenge-settings-page id="challengeSettingsPage" selected-challenge="{{selectedChallenge}}"></challenge-settings-page>
 

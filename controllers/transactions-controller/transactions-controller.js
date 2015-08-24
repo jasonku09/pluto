@@ -17,9 +17,10 @@
         transaction.save();
       });
     },
-    UpdateTransactions: function(authToken) {
+    UpdateTransactions: function(authToken, lastUpdate) {
       var accountsPromise, queryString;
       queryString = "authtoken=" + authToken;
+      queryString += "&lastupdate=" + lastUpdate;
       return accountsPromise = this.$.ajax.send({
         url: this.baseUrl + '/transactions/update?' + queryString,
         method: 'GET'

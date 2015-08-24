@@ -43,7 +43,7 @@
       this.selectedPage--;
     },
     _onNextTap: function() {
-      var Challenge, newACL, newChallenge, promise, startDay;
+      var promise;
       if (this.selectedPage === 1) {
         if (!this.bankAccounts || this.bankAccounts.length === 0) {
           alert("Please link at least 1 bank account to continue");
@@ -54,28 +54,7 @@
         }
         this.$.challengeSettingsPage.CalculateWeeklyAverage();
       } else if (this.selectedPage === 2) {
-        Challenge = Parse.Object.extend("Challenge");
-        newChallenge = new Challenge();
-        newACL = {};
-        newACL[Parse.User.current().id] = {
-          "read": true,
-          "write": true
-        };
-        newChallenge.setACL(newACL);
-        if (moment().weekday() === 0) {
-          startDay = 7;
-        } else {
-          startDay = moment().weekday();
-        }
-        promise = newChallenge.save({
-          week: new Date(moment().weekday(1)),
-          max_spend: this.selectedChallenge.maxSpend,
-          average_spending: this.selectedChallenge.averageSpending,
-          save_percentage: this.selectedChallenge.savePercentage,
-          start_day: startDay,
-          userId: Parse.User.current().get('username'),
-          status: 'In Progress'
-        });
+        promise = this.$.challengesController.CreateNewChallenge(this.selectedChallenge.maxSpend, this.selectedChallenge.averageSpending, this.selectedChallenge.savePercentage);
         promise.then((function(_this) {
           return function() {
             _this.$.confirmationDialog.open();

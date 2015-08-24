@@ -5,17 +5,27 @@
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
 
 <link rel="import" href="../../app/challenges-transactions-list/challenges-transactions-list.html">
+<link rel="import" href="../../controllers/challenges-controller/challenges-controller.html">
 <link rel="import" href="../../controllers/transactions-controller/transactions-controller.html">
 <link rel="import" href="../../app/pluto-chart/pluto-chart.html">
 <link rel="import" href="../../services/pluto-user/pluto-user.html">
 <link rel="import" href="../../services/transactions-parser/transactions-parser.coffee">
+<link rel="import" href="../../app/pluto-challenge-card/pluto-challenge-card.html">
 
 <dom-module id="challenges-page">
   <link rel="import" type="css" href="challenges-page.css">
   <template>
     <pluto-user id="user"></pluto-user>
+    <challenges-controller id="challengesController"></challenges-controller>
     <transactions-controller id="transactionsController"></transactions-controller>
     <transactions-parser id="transactionsParser"></transactions-parser>
+
+    <paper-dialog id="newChallengeDialog" no-cancel-on-outside-click>
+      <h3>Select New Challenge</h3>
+      <pluto-challenge-card></pluto-challenge-card>
+      <paper-button on-tap="_CreateNewChallenge">Accept Challenge</paper-button>
+    </paper-dialog>
+
     <div class="vertical layout fit center unresolved">
 
       <!-- Header -->
@@ -30,15 +40,25 @@
 
       <!-- Spendable -->
       <div class="vertical layout center center-justified flex" style="width: 100%" hidden$="[[viewTransactions]]">
-        <div class="vertical layout center center-justified spendable-container flex">
-          <div class="vertical layout center center-justified big-circle">
-            <div style="font-size: 17px">[[_computeDayCounter(currentChallenge)]]</div>
-            <div style="margin:15px">$<span>[[_calculateSpendable(spent)]]</span></div>
-            <div secondary>[[_computeSavedText(currentChallenge)]]</div>
+        <div class="horizontal layout center flex" style="width: 100%">
+          <iron-icon icon="chevron-left"
+                     class="large-icon"
+                     on-tap="_viewPreviousChallenge"
+                     style$="[[_computePreviousArrowStyle(currentChallengeIndex)]]"></iron-icon>
+          <div class="vertical layout center center-justified spendable-container flex">
+            <div class="vertical layout center center-justified big-circle flex">
+              <div style="font-size: 17px">[[_computeDayCounter(currentChallenge)]]</div>
+              <div style="margin:15px">$<span>[[_calculateSpendable(spent)]]</span></div>
+              <div secondary>[[_computeSavedText(currentChallenge)]]</div>
+            </div>
+            <!--<pluto-chart id="chart" chart-width="425" chart-height="200" type="line" data="[[chartData]]" options="[[chartOptions]]"></pluto-chart>-->
           </div>
-          <!--<pluto-chart id="chart" chart-width="425" chart-height="200" type="line" data="[[chartData]]" options="[[chartOptions]]"></pluto-chart>-->
+          <iron-icon icon="chevron-right"
+                     class="large-icon"
+                     on-tap="_viewNextChallenge"
+                     style$="[[_computeNextArrowStyle(currentChallengeIndex)]]"></iron-icon>
         </div>
-        <paper-item class="vertical layout center">You're killing it! Keep it up.</paper-item>
+        <paper-item class="vertical layout center" style="font-size: 23px;color: #75B1B5;text-align: center;">You're killing it! Keep it up.</paper-item>
         <div class="horizontal layout" style="width: 100%; height: 70px">
           <paper-button class="flex" on-tap="_ViewTransactions">Transactions</paper-button>
           <paper-button class="flex">Insights</paper-button>

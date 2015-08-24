@@ -11,8 +11,27 @@
       }
     },
     attached: function() {
+      this.refreshing = false;
       this.transactionsController = this.$.transactionsController;
       this.transactionsParser = this.$.transactionsParser;
+      this.UpdateTransactions();
+    },
+    UpdateTransactions: function(force) {
+      var User, query;
+      User = Parse.Object.extend("User");
+      query = new Parse.Query(User);
+      query.equalTo('objectId', Parse.User.current().id);
+      return query.find().then((function(_this) {
+        return function(results) {
+          var lastUpdate;
+          lastUpdate = results[0].attributes.lastTransactionsUpdate;
+          if (moment(lastUpdate).isBefore(moment(), 'day') || force) {
+            _this.$.transactionsController.UpdateTransactions(Parse.User.current()._sessionToken, moment(lastUpdate).subtract(30, 'days').format('M/D/YYYY'));
+          }
+          results[0].set('lastTransactionsUpdate', new Date());
+          return results[0].save();
+        };
+      })(this));
     },
     GetTransactions: function(min, max) {
       var promise;
@@ -74,6 +93,16 @@
       }
       this.FilterTransactions();
     },
+    _onRefreshTap: function() {
+      var promise;
+      this.refreshing = true;
+      promise = this.UpdateTransactions(true);
+      return promise.then((function(_this) {
+        return function() {
+          _this.refreshing = false;
+        };
+      })(this));
+    },
     _onFoodTap: function() {
       this.transactionsFilter = 'food';
     },
@@ -82,6 +111,7 @@
     },
     _caluclateSpent: function(foodArray) {
       var i, item, len, total;
+      this.spent = null;
       if (foodArray.length === 0) {
         this.spent = 0;
       } else {

@@ -15,8 +15,9 @@ Polymer
       transaction.save()
       return
 
-  UpdateTransactions: (authToken)->
+  UpdateTransactions: (authToken, lastUpdate)->
     queryString = "authtoken=" + authToken
+    queryString += "&lastupdate=" + lastUpdate
     accountsPromise = @$.ajax.send
       url: @baseUrl + '/transactions/update?' + queryString
       method: 'GET'

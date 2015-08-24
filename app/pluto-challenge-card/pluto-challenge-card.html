@@ -1,0 +1,63 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="pluto-challenge-card">
+  <style>
+    :host {
+      display: block;
+    }
+    .main{
+      padding-top: 10px;
+      background: #f3c04d;
+      color: white;
+      border: 1px solid lightgrey
+    }
+    paper-item{
+      letter-spacing: 2px;
+      width: 60%
+    }
+    paper-item, p, div {
+      text-align:center;
+    }
+    span{
+      font-weight: bold;
+    }
+    .image-container{
+      background-color: white;
+      height: 90px;
+      width: 90px;
+      border-radius: 50%;
+      margin-bottom: 30px;
+    }
+    img{
+      width: 70px;
+      height: 70px;
+    }
+    .bottom{
+      background-color: white;
+      color: black;
+    }
+  </style>
+  <template>
+    <div class="vertical layout center center-justified main">
+      <paper-item>
+        <span>Spend Less on Food and Drinks</span>
+      </paper-item>
+      <div class="horizontal layout center center-justified">
+        <div class="image-container vertical layout center center-justified">
+          <img src="../../resources/icons/pretzel.png">
+        </div>
+      </div>
+      <div class="bottom">
+        <div>Commit to spend less than your average weeky spend on</div>
+        <div><span>Bars, Cafes and Restaurants</span></div>
+      </div>
+    </div>
+  </template>
+</dom-module>
+
+<script>
+  Polymer({
+    is: 'pluto-challenge-card',
+
+  });
+</script>
