@@ -7,18 +7,45 @@
 <link rel="import" href="../../bower_components/neon-animation/neon-animation.html">
 <link rel="import" href="../../bower_components/paper-progress/paper-progress.html">
 <link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-spinner/paper-spinner.html">
 
 <link rel="import" href="../../app/pluto-confirmation-dialog/pluto-confirmation-dialog.html">
 <link rel="import" href="../../pages/bank-accounts-page/bank-accounts-page.html">
 <link rel="import" href="../../pages/challenge-settings-page/challenge-settings-page.html">
 <link rel="import" href="../../controllers/challenges-controller/challenges-controller.html">
+<link rel="import" href="../../services/transactions-parser/transactions-parser.html">
 
 <dom-module id="onboarding-page">
   <link rel="import" type="css" href="onboarding-page.css">
   <template>
     <challenges-controller id="challengesController"></challenges-controller>
+    <transactions-parser id="transactionsParser"></transactions-parser>
 
     <div class="fit vertical layout">
+
+      <pluto-confirmation-dialog message="Your weekly challenge on Food and Drinks has been created!"
+                                 id="confirmationDialog"
+                                 on-close="_onConfirmClose"></pluto-confirmation-dialog>
+
+      <paper-dialog id="creatingDialog"
+                    class="vertical layout center center-justified"
+                    style="width: 70%"
+                    no-cancel-on-outside-click>
+        <pluto-loading-indicator type="spinner"></pluto-loading-indicator>
+        <paper-item>Creating Challenge...</paper-item>
+      </paper-dialog>
+
+      <paper-dialog id="calculateDialog"
+                    class="vertical layout center center-justified"
+                    style="width: 70%"
+                    no-cancel-on-outside-click>
+        <pluto-loading-indicator type="spinner" hidden$="[[!calculating]]"></pluto-loading-indicator>
+        <iron-icon icon="check" hidden$="[[calculating]]" style="color:#9ad7db; width: 70px; height: 70px"></iron-icon>
+        <p>[[_computeCalculatingText(calculating)]]</p>
+        <h3 style="color:#9ad7db" hidden$="[[calculating]]">$<span>[[weeklySpending]]</span></h3>
+        <paper-button on-tap="_onOkayTap" hidden$="[[calculating]]">Okay</paper-button>
+      </paper-dialog>
+
       <div id="infoBar"></div>
       <paper-header-panel class="flex" mode="seamed">
 
@@ -35,7 +62,39 @@
           <paper-progress class="transiting" value="[[_computeProgressValue(selectedPage)]]"></paper-progress>
           <neon-animated-pages id="pages" class="flex" selected="[[selectedPage]]" entry-animation="[[entryAnimations]]" exit-animation="[[exitAnimations]]">
 
-            <!-- Page 1 -->
+            <!-- Welcome Page -->
+            <div class="vertical layout center center-justified">
+              <h2 style="color: #9ad7db">Hi, Tim.</h2>
+              <h2 style="margin-bottom: 50px">Welcome to Pluto!</h2>
+              <p style="text-align:center; width: 70%; letter-spacing:1px; line-height: 25px;">Before we get started, tell us a few things so we can better understand your financial status</p>
+            </div>
+
+            <!-- Goal Page 1 -->
+            <div class="vertical layout center center-justified">
+              <h3 style="width:80%;text-align:center;">What is the most immediate thing you want to save for?</h3>
+              <paper-input value="{{goalItem}}"
+                           placeholder="e.g. Coachella or Car Repair"
+                           style="width:80%"></paper-input>
+            </div>
+
+            <!-- Goal Page 2-->
+            <div class="vertical layout center center-justified">
+              <h3 style="width:80%;text-align:center;">How much do you need to save for this goal?</h3>
+              <paper-input value="{{goalAmount}}"
+                           style="width:80%"
+                           type="number"></paper-input>
+            </div>
+
+            <!-- Thank You Page -->
+            <div class="vertical layout center center-justified">
+              <h3 style="margin-bottom: 50px">Thanks for sharing your goal!</h3>
+              <p style="text-align:center; width: 80%; letter-spacing:1px; line-height: 25px;">
+                We'll provide you with weekly challenges based on your current spending habits to help you save for your goal</p>
+            </div>
+
+            <bank-accounts-page ready="{{bankAccountsReady}}" bank-accounts="{{bankAccounts}}" compact-mode="true"></bank-accounts-page>
+
+            <!-- Goal Select Page -->
             <div class="vertical layout center center-justified">
               <p style="color: #AEAEAE;width: 80%;">Select a challenge to tackle this week and see how much you can save from it!</p>
               <div class="flex"></div>
@@ -51,15 +110,10 @@
               <div class="flex"></div>
             </div>
 
-            <bank-accounts-page ready="{{bankAccountsReady}}" bank-accounts="{{bankAccounts}}" compact-mode="true"></bank-accounts-page>
-
-            <challenge-settings-page id="challengeSettingsPage" selected-challenge="{{selectedChallenge}}"></challenge-settings-page>
+            <challenge-settings-page id="challengeSettingsPage" selected-challenge="{{selectedChallenge}}" weekly-spending="[[weeklySpending]]"></challenge-settings-page>
 
           </neon-animated-pages>
 
-          <pluto-confirmation-dialog message="Your weekly challenge on Food and Drinks has been created!"
-                                     id="confirmationDialog"
-                                     on-close="_onConfirmClose"></pluto-confirmation-dialog>
           <div id="nextButton"
                class="vertical layout center center-justified"
                on-tap="_onNextTap"

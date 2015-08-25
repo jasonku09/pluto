@@ -5,6 +5,9 @@
       selectedChallenge: {
         type: Object,
         notify: true
+      },
+      weeklySpending: {
+        observer: '_onWeeklySpendingChange'
       }
     },
     attached: function() {
@@ -45,25 +48,8 @@
         averageSpending: this.weeklySpending
       };
     },
-    CalculateWeeklyAverage: function() {
-      var promise;
-      this.parsing = true;
-      promise = this.$.transactionsParser.CalculateWeeklyAverage(moment().weekday(), 'Food and Drink');
-      promise.then((function(_this) {
-        return function(average) {
-          _this.parsing = false;
-          _this.weeklySpending = Math.round(average.reduce(function(a, b) {
-            return a + b;
-          }) / average.length * 100) / 100;
-          _this.challengePercentages = [10, 20, 30];
-        };
-      })(this), (function(_this) {
-        return function(error) {
-          _this.parsing = false;
-          _this.weeklySpending = 100;
-          return console.log(error);
-        };
-      })(this));
+    _onWeeklySpendingChange: function() {
+      this.challengePercentages = [10, 20, 30];
     }
   });
 

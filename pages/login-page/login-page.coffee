@@ -35,6 +35,7 @@ Polymer
     user.set "email", @email
     user.set "username", @email
     user.set "password", @password
+    user.set "nickname", @name
 
     promise = user.signUp(null)
     promise.then (success)=>
@@ -49,6 +50,7 @@ Polymer
   _ValidateInputs: ->
     inputs = [@$.emailInput, @$.passwordInput]
     if @selectedTab is 'Signup'
+      inputs.push @$.nameInput
       if @password != @passwordConfirm
         @error = true
         @errorMessage = "Oops, passwords do not match"

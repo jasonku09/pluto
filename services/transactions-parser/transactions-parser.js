@@ -9,7 +9,7 @@
       transactionsPromise = this.$.transactionsController.GetTransactions(category);
       return transactionsPromise.then((function(_this) {
         return function(transactions) {
-          var bankTransactionDictionary, i, len, minDate, transaction;
+          var bankTransactionDictionary, i, len, minDate, totals, transaction;
           transactions = _this.Parse(transactions);
           bankTransactionDictionary = {};
           for (i = 0, len = transactions.length; i < len; i++) {
@@ -24,7 +24,10 @@
             }
           }
           minDate = _this._getMinWeekday(bankTransactionDictionary, startDay);
-          return _this._getWeeklyTotals(transactions, startDay, minDate);
+          totals = _this._getWeeklyTotals(transactions, startDay, minDate);
+          return Math.round(totals.reduce(function(a, b) {
+            return a + b;
+          }) / totals.length * 100) / 100;
         };
       })(this));
     },

@@ -40,18 +40,23 @@
     <div class="vertical layout fit main center">
       <div class="fit" style="background-color: rgba(74, 73, 73, 0.86); z-index:1"></div>
       <img class="fit" style="left:-150px" src="../../login-background.jpg">
-      <div class="vertical layout center center-justified" style="height: 30%">
+      <div class="vertical layout center center-justified" style="height: 30%" hidden$="[[!_computeSignupHidden(selectedTab)]]">
         <div id="logo" >pluto</div>
       </div>
-
+      <div class="flex" hidden$="[[_computeSignupHidden(selectedTab)]]"></div>
       <div id="inputContainer" class="vertical layout flex center" hidden$=[[loading]] style="z-index: 5">
         <paper-tabs selected="{{selectedTab}}" attr-for-selected="name">
           <paper-tab name="Login">LOGIN</paper-tab>
           <paper-tab name="Signup">SIGN UP</paper-tab>
         </paper-tabs>
         <!-- Input Fields -->
-        <gold-email-input id="emailInput" label="E-MAIL" value="{{email}}" error-message="invalid email" always-float-label style="margin-top: 25px"></gold-email-input>
+        <paper-input hidden$="[[_computeSignupHidden(selectedTab)]]"
+                     id="nameInput" label="NAME" value="{{name}}" always-float-label style="margin-top: 25px"></paper-input>
+        <div class="flex"></div>
+        <gold-email-input id="emailInput" label="E-MAIL" value="{{email}}" error-message="invalid email" always-float-label></gold-email-input>
+        <div class="flex"></div>
         <paper-input id="passwordInput" label="PASSWORD" value="{{password}}" type="password" always-float-label></paper-input>
+        <div class="flex"></div>
         <paper-input hidden$="[[_computeSignupHidden(selectedTab)]]"
                      id="passwordInputConfirm"
                      label="CONFIRM PASSWORD"

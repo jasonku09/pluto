@@ -41,6 +41,7 @@
       user.set("email", this.email);
       user.set("username", this.email);
       user.set("password", this.password);
+      user.set("nickname", this.name);
       promise = user.signUp(null);
       promise.then((function(_this) {
         return function(success) {
@@ -55,6 +56,7 @@
       var i, input, inputs, len;
       inputs = [this.$.emailInput, this.$.passwordInput];
       if (this.selectedTab === 'Signup') {
+        inputs.push(this.$.nameInput);
         if (this.password !== this.passwordConfirm) {
           this.error = true;
           this.errorMessage = "Oops, passwords do not match";

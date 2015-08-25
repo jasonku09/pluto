@@ -21,3 +21,17 @@ Polymer
       start_day: startDay
       userId: Parse.User.current().get('username')
       status: 'In Progress'
+
+  CreateNewGoal: (name, amount)->
+    Goal = Parse.Object.extend("Goal")
+    newGoal = new Goal()
+    newACL = {}
+    newACL[Parse.User.current().id] = {
+      "read": true
+      "write": true
+    }
+    newGoal.setACL newACL
+    promise = newGoal.save
+      name: name
+      amount: parseInt amount
+      saved: 0

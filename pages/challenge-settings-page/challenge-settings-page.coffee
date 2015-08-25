@@ -5,6 +5,8 @@ Polymer
     selectedChallenge:
       type: Object
       notify: true
+    weeklySpending:
+      observer: '_onWeeklySpendingChange'
 
   attached: ->
     @weekSpan = moment().format('ddd') + ' - Sun '
@@ -42,16 +44,6 @@ Polymer
     }
     return
 
-  CalculateWeeklyAverage:->
-    @parsing = true
-    promise = @$.transactionsParser.CalculateWeeklyAverage(moment().weekday(), 'Food and Drink')
-    promise.then (average)=>
-      @parsing = false
-      @weeklySpending = Math.round(average.reduce((a,b)-> return a + b) / average.length * 100) / 100
-      @challengePercentages = [10, 20, 30]
-      return
-    , (error)=>
-      @parsing = false
-      @weeklySpending = 100
-      console.log error
+  _onWeeklySpendingChange: ->
+    @challengePercentages = [10, 20, 30]
     return

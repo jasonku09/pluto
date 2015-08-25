@@ -18,7 +18,8 @@ Polymer
           bankTransactionDictionary[transaction.bankAccount] = [transaction]
         else bankTransactionDictionary[transaction.bankAccount].push transaction
       minDate = @_getMinWeekday bankTransactionDictionary, startDay
-      @_getWeeklyTotals transactions, startDay, minDate
+      totals = @_getWeeklyTotals transactions, startDay, minDate
+      return Math.round(totals.reduce((a,b)-> return a + b) / totals.length * 100) / 100
 
   Parse: (transactions)->
     parsed = []
