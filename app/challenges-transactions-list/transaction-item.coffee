@@ -38,9 +38,12 @@ Polymer
         console.log 'tracking started!'
       when 'track'
         newPosition = @currentPosition + e.detail.ddx
-        @$.item.style.marginLeft = newPosition + 'px'
-        @$.item.style.marginRight = -newPosition + 'px'
-        @currentPosition = newPosition
+        if newPosition > 0
+          return
+        else
+          @$.item.style.marginLeft = newPosition + 'px'
+          @$.item.style.marginRight = -newPosition + 'px'
+          @currentPosition = newPosition
       when 'end'
         @$.item.classList.add 'transition'
         if @currentPosition < -50

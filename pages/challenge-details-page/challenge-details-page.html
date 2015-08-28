@@ -1,0 +1,40 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<dom-module id="challenge-details-page">
+  <link rel="import" type="css" href="challenge-details-page.css">
+  <template>
+    <div class="vertical layout fit center unresolved main">
+
+      <paper-tabs selected="{{selectedTab}}" attr-for-selected="name">
+        <paper-tab name="progress">PROGRESS</paper-tab>
+        <paper-tab name="insights">INSIGHTS</paper-tab>
+        <paper-tab name="transactions">TRANSACTIONS</paper-tab>
+      </paper-tabs>
+
+      <!-- Spendable -->
+      <div class="vertical layout center center-justified flex spendable"
+           hidden$="[[_computeProgressHidden(selectedTab)]]">
+        <div class="horizontal layout center flex" style="width: 100%">
+          <div class="vertical layout center center-justified spendable-container flex">
+            <div class="vertical layout center center-justified big-circle flex">
+              <div style="font-size: 19px; color: rgb(199, 199, 199)">[[_computeDayCounter(challenge)]]</div>
+              <div style="margin:15px; color: white">$<span>[[_computeSpendable(spent)]]</span></div>
+              <div secondary>[[_computeSavedText(challenge)]]</div>
+            </div>
+          </div>
+        </div>
+        <h3 style="margin: 0">Projected Saving: <span style="font-weight:bold">$25</span></h3>
+        <h4>Saving Goal: <span style="font-weight:bold">$20</span></h4>
+      </div>
+
+      <challenges-transactions-list id="transactionsList"
+                                    hidden$="[[_computeTransactionsHidden(selectedTab)]]"
+                                    on-change-success="_onChangeSuccess"
+                                    spent="{{spent}}"></challenges-transactions-list>
+
+      <paper-toast id="successToast" duration="1000">Change Successful!</paper-toast>
+
+    </div>
+  </template>
+</dom-module>
+<script src="challenge-details-page.js"></script>

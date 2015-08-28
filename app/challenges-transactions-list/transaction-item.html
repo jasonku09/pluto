@@ -11,9 +11,10 @@
       text-overflow:ellipsis;
       overflow:hidden;
       white-space: nowrap;
+      font-size: 14px;
     }
     paper-item{
-      background-color: white;
+      background-color: #696D77;
       position:relative;
       padding:0;
     }
@@ -30,35 +31,38 @@
     #item{
       z-index: 100;
       width: 100%;
-      background: white;
+      background: #696D77;
       position:relative
     }
     .transition{
       -webkit-transition: all 0.4s ease;
     }
     .date-container{
-      border-radius: 50%;
       background-color: #999999;
       color: white;
       margin-right: 10px;
       width: 40px;
       height: 40px;
+      padding: 3px;
+      border-radius: 5px;
     }
     div[secondary]{
       color:grey;
       font-size:14px;
     }
+    #item > div{
+      padding: 10px 0 10px 0;
+    }
   </style>
   <template>
     <div style="position:relative;">
       <div id="item" on-track="_handleTrack">
-        <div class="horizontal layout center" style=" padding: 14px;">
+        <div class="horizontal layout center">
           <div class="date-container vertical layout center center-justified"
                style$="[[_computeDateStyle(transaction.active)]]"
                on-tap="_onDateTap">[[_formatDate(transaction)]]</div>
           <div class="vertical layout" style="width: 65%;">
             <div class="name">[[transaction.name]]</div>
-            <div secondary>[[transaction.category.0]]</div>
           </div>
           <div>[[_formatAmount(transaction.amount)]]</div>
         </div>

@@ -14,25 +14,29 @@
     }
     #navbar{
       height: var(--navbar-height);
-      background-color: var(--primary-background);
+      background-color: white;
     }
     #navbar div div{
       justify-content: center;
-      color: white;
       font-weight: 100;
       font-size: 12px;
-      font-family: 'Roboto';
+      margin-top: 2px;
+      font-weight: 500;
     }
     paper-tabs{
       width: 100%;
+      height:50px;
     }
   </style>
   <template>
-    <div id="navbar" class="horizontal layout fit">
-      <paper-tabs selected="{{tab}}" attr-for-selected="tab">
+    <div id="navbar" class="horizontal layout">
+      <paper-tabs selected="{{tab}}" attr-for-selected="tab" no-bar>
         <template is="dom-repeat" items="[[tabs]]">
-          <paper-tab tab="[[item.name]]">
-            <iron-icon icon="[[item.icon]]" style$="[[_computeIconStyle(item, tab)]]"></iron-icon>
+          <paper-tab tab="[[item.name]]" style$="[[_computeIconStyle(item, tab)]]">
+            <div class="vertical layout center center-justified">
+              <iron-icon icon="[[item.icon]]"></iron-icon>
+              <div>[[item.name]]</div>
+            </div>
           </paper-tab>
         </template>
       </paper-tabs>

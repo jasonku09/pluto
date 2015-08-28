@@ -1,0 +1,41 @@
+:host {
+  display: block;
+}
+.spendable {
+  width: 100%;
+}
+.spendable .spendable-container {
+  position: relative;
+  left: 0;
+  right: 0;
+  height: 65vw;
+  width: 60vw;
+  color: var(--primary-color);
+}
+.spendable .spendable-container .big-circle {
+  width: 60vw;
+  height: 60vw;
+  border: 10px solid var(--primary-color);
+  border-radius: 50%;
+}
+.spendable .spendable-container .big-circle div {
+  font-size: 50px;
+}
+.spendable .spendable-container .big-circle div[secondary] {
+  font-size: 14px;
+  color: #cccccc;
+}
+paper-tabs {
+  font-weight: 200;
+  width: 100%;
+  color: white;
+  border-bottom: 1px solid var(--primary-color);
+}
+paper-tab {
+  --paper-tab-ink: rgba(255, 255, 255, 0);
+  font-size: 12px;
+}
+paper-tabs /deep/ #selectionBar {
+  height: 4px;
+  background-color: var(--primary-color);
+}

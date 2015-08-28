@@ -1,34 +1,41 @@
 (function() {
   Polymer({
     is: 'challenges-page',
-    properties: {
-      currentChallenge: {
-        observer: '_onChallengeChange'
-      }
-    },
     attached: function() {
       this._GetChallenges();
-      this.viewTransactions = false;
+      this.selectedTab = 'active';
+      this.selectedChallenge = null;
+      this.loading = false;
     },
     _formatDate: function(challenge) {
+      if (!challenge) {
+        return;
+      }
       return challenge.week.format('MMMM ') + moment(challenge.week).weekday(challenge.startDay).format('D - ') + moment(challenge.week).weekday(7).format('D, ') + challenge.week.format('YYYY');
     },
-    _computePreviousArrowStyle: function(index) {
-      if (index === (this.challenges.length - 1)) {
-        return 'color: lightgrey';
-      } else {
-        return 'color: grey';
-      }
+    _computeMainHidden: function(selectedChallenge, loading) {
+      return selectedChallenge !== null || loading;
     },
-    _computeNextArrowStyle: function(index) {
-      if (index === 0) {
-        return 'color: lightgrey';
-      } else {
-        return 'color: grey';
+    _computeDetailsHidden: function(selectedChallenge, loading) {
+      return selectedChallenge === null || loading;
+    },
+    _computeChallenges: function(challenges, selectedTab) {
+      var challenge, filter, filtered, i, len;
+      filtered = [];
+      filter = selectedTab === 'active' ? 'In Progress' : 'Completed';
+      for (i = 0, len = challenges.length; i < len; i++) {
+        challenge = challenges[i];
+        if (challenge.status === filter) {
+          filtered.push(challenge);
+        }
       }
+      return filtered;
     },
     _computeDayCounter: function(challenge) {
       var currentDay, totalDays, weekday;
+      if (!challenge) {
+        return;
+      }
       if (moment().isAfter(moment(challenge.week).weekday(7))) {
         return 'Completed';
       }
@@ -43,30 +50,6 @@
       }
       currentDay = weekday - challenge.startDay + 1;
       return "Day " + currentDay + " / " + totalDays;
-    },
-    _computeSavedText: function(challenge) {
-      if (moment().isAfter(moment(challenge.week).weekday(7))) {
-        return 'saved';
-      } else {
-        return 'left to spend';
-      }
-    },
-    _calculateSpendable: function(spent) {
-      var amount;
-      if (!spent) {
-        return;
-      }
-      if (this.currentChallenge.status === 'Completed') {
-        amount = this.currentChallenge.averageSpend - spent;
-        if (amount < 0) {
-          amount = 0;
-        }
-        return amount.toFixed(2);
-      } else if (this.currentChallenge.maxSpend - spent < 0) {
-        return 0;
-      } else {
-        return this.currentChallenge.maxSpend - spent;
-      }
     },
     _GetChallenges: function() {
       var Challenge, promise, query;
@@ -106,19 +89,20 @@
       }
       this.challenges = temp;
     },
-    _onChallengeChange: function() {
-      var challengeEnd, challengeStart, week;
-      week = this.currentChallenge.week;
-      challengeStart = moment(week).weekday(this.currentChallenge.startDay);
-      challengeEnd = moment(week).weekday(7);
-      this.$.transactionsList.GetTransactions(challengeStart, challengeEnd);
+    _onChallengeTap: function(e) {
+      var target;
+      target = e.target;
+      while (target !== this && !target._templateInstance) {
+        target = target.parentNode;
+      }
+      this.selectedChallenge = this.$.challengeRepeat.itemForElement(target);
+      this.loading = true;
+    },
+    _onDetailsReady: function() {
+      return this.loading = false;
     },
     _onBackTap: function() {
-      this.viewTransactions = false;
-    },
-    _ViewTransactions: function() {
-      this.viewTransactions = true;
-      this.$.transactionsList.transactionsFilter = 'food';
+      return this.selectedChallenge = null;
     },
     _onChangeSuccess: function() {
       this.$.successToast.show();
@@ -140,20 +124,6 @@
           });
         };
       })(this));
-    },
-    _viewPreviousChallenge: function() {
-      if (this.currentChallengeIndex === (this.challenges.length - 1)) {
-        return;
-      }
-      this.currentChallengeIndex++;
-      this.currentChallenge = this.challenges[this.currentChallengeIndex];
-    },
-    _viewNextChallenge: function() {
-      if (this.currentChallengeIndex === 0) {
-        return;
-      }
-      this.currentChallengeIndex--;
-      this.currentChallenge = this.challenges[this.currentChallengeIndex];
     }
   });
 

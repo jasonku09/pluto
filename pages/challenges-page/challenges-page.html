@@ -3,14 +3,15 @@
 <link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
 <link rel="import" href="../../bower_components/iron-list/iron-list.html">
 <link rel="import" href="../../bower_components/paper-toast/paper-toast.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
 
 <link rel="import" href="../../app/challenges-transactions-list/challenges-transactions-list.html">
+<link rel="import" href="../../app/pluto-challenge-card/pluto-challenge-card.html">
 <link rel="import" href="../../controllers/challenges-controller/challenges-controller.html">
 <link rel="import" href="../../controllers/transactions-controller/transactions-controller.html">
-<link rel="import" href="../../app/pluto-chart/pluto-chart.html">
 <link rel="import" href="../../services/pluto-user/pluto-user.html">
 <link rel="import" href="../../services/transactions-parser/transactions-parser.coffee">
-<link rel="import" href="../../app/pluto-challenge-card/pluto-challenge-card.html">
+<link rel="import" href="../challenge-details-page/challenge-details-page.html">
 
 <dom-module id="challenges-page">
   <link rel="import" type="css" href="challenges-page.css">
@@ -26,52 +27,61 @@
       <paper-button on-tap="_CreateNewChallenge">Accept Challenge</paper-button>
     </paper-dialog>
 
-    <div class="vertical layout fit center unresolved">
+    <paper-header-panel class="fit main" mode="seamed">
 
-      <!-- Header -->
-      <paper-item>
-        <iron-icon icon="arrow-back" hidden$="[[!viewTransactions]]" on-tap="_onBackTap"
-                   style="position: fixed;top: 90px;left: 18px;"></iron-icon>
-        <paper-item-body two-line class="vertical layout center">
-          <div style="font-size: 20px; margin-bottom: 10px; margin-top: 15px;">SAVE ON FOOD & DRINK</div>
-          <div style="font-size: 12px" secondary>[[_formatDate(currentChallenge)]]</div>
-        </paper-item-body>
-      </paper-item>
+      <!-- Toolbar -->
+      <paper-toolbar tool id="toolbar">
+        <iron-icon icon="chevron-left"
+                   hidden$="[[_computeDetailsHidden(selectedChallenge, loading)]]"
+                   on-tap="_onBackTap"></iron-icon>
+        <div class="flex"></div>
+        <paper-item class="header" hidden$="[[_computeMainHidden(selectedChallenge, loading)]]">Challenges</paper-item>
+        <paper-item hidden$="[[_computeDetailsHidden(selectedChallenge, loading)]]">
+          <paper-item-body>
+            <div>Spend less on Food & Drinks</div>
+            <div secondary>[[_formatDate(selectedChallenge)]]</div>
+          </paper-item-body>
+        </paper-item>
+        <paper-item hidden$="[[!loading]]">Loading...</paper-item>
+        <div class="flex"></div>
+      </paper-toolbar>
 
-      <!-- Spendable -->
-      <div class="vertical layout center center-justified flex" style="width: 100%" hidden$="[[viewTransactions]]">
-        <div class="horizontal layout center flex" style="width: 100%">
-          <iron-icon icon="chevron-left"
-                     class="large-icon"
-                     on-tap="_viewPreviousChallenge"
-                     style$="[[_computePreviousArrowStyle(currentChallengeIndex)]]"></iron-icon>
-          <div class="vertical layout center center-justified spendable-container flex">
-            <div class="vertical layout center center-justified big-circle flex">
-              <div style="font-size: 17px">[[_computeDayCounter(currentChallenge)]]</div>
-              <div style="margin:15px">$<span>[[_calculateSpendable(spent)]]</span></div>
-              <div secondary>[[_computeSavedText(currentChallenge)]]</div>
-            </div>
-            <!--<pluto-chart id="chart" chart-width="425" chart-height="200" type="line" data="[[chartData]]" options="[[chartOptions]]"></pluto-chart>-->
-          </div>
-          <iron-icon icon="chevron-right"
-                     class="large-icon"
-                     on-tap="_viewNextChallenge"
-                     style$="[[_computeNextArrowStyle(currentChallengeIndex)]]"></iron-icon>
-        </div>
-        <paper-item class="vertical layout center" style="font-size: 23px;color: #75B1B5;text-align: center;">You're killing it! Keep it up.</paper-item>
-        <div class="horizontal layout" style="width: 100%; height: 70px">
-          <paper-button class="flex" on-tap="_ViewTransactions">Transactions</paper-button>
-          <paper-button class="flex">Insights</paper-button>
+      <!-- Main Content -->
+      <div class="vertical layout flex" hidden$="[[_computeMainHidden(selectedChallenge, loading)]]">
+        <paper-tabs selected="{{selectedTab}}" attr-for-selected="name">
+          <paper-tab name="active">ACTIVE</paper-tab>
+          <paper-tab name="past">PAST</paper-tab>
+        </paper-tabs>
+
+        <div class="challenge-container">
+          <template id="challengeRepeat"
+                    is="dom-repeat"
+                    items="[[_computeChallenges(challenges, selectedTab)]]"
+                    as="challenge">
+              <paper-material elevation="2">
+                <div class="challenge-item vertical layout end-justified" on-tap="_onChallengeTap">
+                  <iron-icon icon="shopping-cart"></iron-icon>
+                  <paper-item class="vertical layout start">
+                    <div>Spend less on Food & Drinks</div>
+                    <div><span>[[_formatDate(challenge)]]</span> * <span>[[_computeDayCounter(challenge)]]</span></div>
+                  </paper-item>
+                </div>
+              </paper-material>
+          </template>
         </div>
       </div>
 
-      <challenges-transactions-list hidden$="[[!viewTransactions]]" id="transactionsList"
-                                    on-change-success="_onChangeSuccess"
-                                    spent="{{spent}}"></challenges-transactions-list>
+      <div class="vertical layout fit center center-justified" hidden$="[[!loading]]">
+        <pluto-loading-indicator type="spinner"></pluto-loading-indicator>
+        <div>Just a second...</div>
+      </div>
 
-      <paper-toast id="successToast" duration="1000">Change Successful!</paper-toast>
+      <challenge-details-page hidden$="[[_computeDetailsHidden(selectedChallenge, loading)]]"
+                              challenge="[[selectedChallenge]]"
+                              on-ready="_onDetailsReady"></challenge-details-page>
 
-    </div>
+    </paper-header-panel>
+
   </template>
 </dom-module>
 <script src="challenges-page.js"></script>

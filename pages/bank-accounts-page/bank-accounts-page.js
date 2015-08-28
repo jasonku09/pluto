@@ -11,10 +11,11 @@
       }
     },
     _computeHeaderHidden: function(bankAccounts) {
-      if (!bankAccounts) {
+      if (!bankAccounts || bankAccounts.length === 0) {
+        return true;
+      } else {
         return false;
       }
-      return true;
     },
     _computeLoaderHidden: function(parseTimeRemaining, parseFinish) {
       return !moment().isBefore(this.parseFinish);
@@ -105,7 +106,7 @@
                 account.icon = "../../resources/icons/usbank.png";
                 break;
               case "wells":
-                account.icon = "../../resources/icons/wellsfargo.jpg.png";
+                account.icon = "../../resources/icons/wellsfargo.jpg";
             }
             bankaccounts.push(account);
           }

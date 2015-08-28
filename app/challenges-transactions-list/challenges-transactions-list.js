@@ -122,7 +122,7 @@
             total += item.amount;
           }
         }
-        this.spent = total.toFixed(2);
+        this.spent = total;
       }
     },
     _onDateChange: function(e) {

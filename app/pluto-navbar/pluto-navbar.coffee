@@ -5,17 +5,17 @@ Polymer
       tabs:
         type: Object
         value: [
-          name: "Feed"
+          name: "Challenges"
           icon: 'home'
         ,
           name: "Goals"
           icon: 'flag'
-        #,
-        #  name: "Rewards"
-        #  icon: 'star-border'
-        #,
-        #  name: "Dashboard"
-        #  icon: 'dashboard'
+        ,
+          name: "Accounts"
+          icon: 'star-border'
+        ,
+          name: "Settings"
+          icon: 'settings'
         ]
 
       tab:
@@ -24,13 +24,13 @@ Polymer
 
   attached: ->
     if !@tab
-      @tab = "Feed"
+      @tab = "Challenges"
     return
 
   _computeIconStyle: (item)->
     if @tab == item.name
-      return 'color:white'
-    else return 'color: #4b786a'
+      return 'color: #5DCAD1'
+    else return 'color: #9c9c9c'
 
   _onTabChanged: ->
     @router.go "/" + @tab.toLowerCase()

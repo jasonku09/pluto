@@ -74,7 +74,7 @@
 
     <div class="vertical layout fit center" style="background-color:white; overflow:auto">
 
-      <div id="infoBar" hidden$="[[compactMode]]"></div>
+      <div id="infoBar" hidden$="[[compactMode]]" style="background-color:white"></div>
       <paper-toolbar hidden$="[[compactMode]]" style="width: 100%; background-color: #FFFFFF; color: black;">
         <iron-icon on-tap="_onBackTap" icon="arrow-back" style="margin-right: 100px"></iron-icon>
         <div>Bank Accounts</div>
@@ -84,7 +84,7 @@
       <paper-item hidden$="[[_computeHeaderHidden(bankAccounts)]]">Cash Accounts</paper-item>
       <template is="dom-repeat" items="[[_getCashAccounts(bankAccounts)]]" as="account">
         <paper-item>
-          <iron-icon icon="label" style$="[[_computeIconColor(bank.color)]]"></iron-icon>
+          <iron-icon src="[[account.icon]]"></iron-icon>
           <div class="flex-3">[[_getAccountName(account)]]</div>
           <div class="money flex">[[_getAccountBalance(account)]]</div>
         </paper-item>

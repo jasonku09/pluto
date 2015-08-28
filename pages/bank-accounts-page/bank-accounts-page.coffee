@@ -10,8 +10,9 @@ Polymer
       notify: true
 
   _computeHeaderHidden: (bankAccounts)->
-    return false if !bankAccounts
-    return true
+    if !bankAccounts || bankAccounts.length is 0
+      return true
+    else return false
 
   _computeLoaderHidden: (parseTimeRemaining, parseFinish)-> !moment().isBefore(@parseFinish)
 
@@ -67,7 +68,7 @@ Polymer
             when "citi" then account.icon = "../../resources/icons/citi.jpg"
             when "usaa" then account.icon = "../../resources/icons/usaa.jpg"
             when "us" then account.icon = "../../resources/icons/usbank.png"
-            when "wells" then account.icon = "../../resources/icons/wellsfargo.jpg.png"
+            when "wells" then account.icon = "../../resources/icons/wellsfargo.jpg"
           bankaccounts.push account
 
       self.bankAccounts = bankaccounts

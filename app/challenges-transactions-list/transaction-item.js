@@ -43,9 +43,13 @@
           break;
         case 'track':
           newPosition = this.currentPosition + e.detail.ddx;
-          this.$.item.style.marginLeft = newPosition + 'px';
-          this.$.item.style.marginRight = -newPosition + 'px';
-          this.currentPosition = newPosition;
+          if (newPosition > 0) {
+            return;
+          } else {
+            this.$.item.style.marginLeft = newPosition + 'px';
+            this.$.item.style.marginRight = -newPosition + 'px';
+            this.currentPosition = newPosition;
+          }
           break;
         case 'end':
           this.$.item.classList.add('transition');

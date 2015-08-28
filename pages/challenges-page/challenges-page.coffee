@@ -1,32 +1,34 @@
 Polymer
   is: 'challenges-page'
 
-  properties:
-    currentChallenge:
-      observer: '_onChallengeChange'
-
   attached: ->
     @_GetChallenges()
-    @viewTransactions = false
+    @selectedTab = 'active'
+    @selectedChallenge = null
+    @loading = false
     return
 
   _formatDate: (challenge)->
+    return if !challenge
     return challenge.week.format('MMMM ') +
       moment(challenge.week).weekday(challenge.startDay).format('D - ') +
       moment(challenge.week).weekday(7).format('D, ') +
       challenge.week.format 'YYYY'
 
-  _computePreviousArrowStyle: (index)->
-    if index is (@challenges.length - 1)
-      return 'color: lightgrey'
-    else return 'color: grey'
+  _computeMainHidden: (selectedChallenge, loading)-> selectedChallenge != null || loading
 
-  _computeNextArrowStyle: (index)->
-    if index is 0
-      return 'color: lightgrey'
-    else return 'color: grey'
+  _computeDetailsHidden: (selectedChallenge, loading)-> selectedChallenge is null || loading
+
+  _computeChallenges:(challenges, selectedTab)->
+    filtered = []
+    filter = if selectedTab is 'active' then 'In Progress' else 'Completed'
+    for challenge in challenges
+      if challenge.status is filter
+        filtered.push challenge
+    return filtered
 
   _computeDayCounter:(challenge)->
+    return if !challenge
     if moment().isAfter moment(challenge.week).weekday(7)
       return 'Completed'
     totalDays = 8 - challenge.startDay
@@ -38,21 +40,6 @@ Polymer
     currentDay = weekday - challenge.startDay + 1
     return "Day " + currentDay + " / " + totalDays
 
-  _computeSavedText:(challenge)->
-    if moment().isAfter moment(challenge.week).weekday(7)
-      return 'saved'
-    else return 'left to spend'
-
-  _calculateSpendable: (spent)->
-    return if !spent
-    if @currentChallenge.status is 'Completed'
-      amount = @currentChallenge.averageSpend - spent
-      if amount < 0
-        amount = 0
-      return amount.toFixed(2)
-    else if @currentChallenge.maxSpend - spent < 0
-      return 0
-    else return @currentChallenge.maxSpend - spent
 
   _GetChallenges: ->
     Challenge = Parse.Object.extend("Challenge")
@@ -84,21 +71,19 @@ Polymer
     @challenges = temp
     return
 
-  _onChallengeChange: ->
-    week = @currentChallenge.week
-    challengeStart = moment(week).weekday(@currentChallenge.startDay)
-    challengeEnd = moment(week).weekday(7)
-    @$.transactionsList.GetTransactions(challengeStart, challengeEnd)
+  _onChallengeTap: (e)->
+    target = e.target
+    while target != @ && !target._templateInstance
+      target = target.parentNode
+    @selectedChallenge = @$.challengeRepeat.itemForElement(target)
+    @loading = true
     return
+
+  _onDetailsReady: ->
+    @loading = false
 
   _onBackTap: ->
-    @viewTransactions = false
-    return
-
-  _ViewTransactions: ->
-    @viewTransactions = true
-    @$.transactionsList.transactionsFilter = 'food'
-    return
+    @selectedChallenge = null
 
   _onChangeSuccess: ->
     @$.successToast.show()
@@ -114,15 +99,3 @@ Polymer
         @$.newChallengeDialog.close()
         @_GetChallenges()
       return
-
-  _viewPreviousChallenge: ->
-    return if @currentChallengeIndex is (@challenges.length - 1)
-    @currentChallengeIndex++
-    @currentChallenge = @challenges[@currentChallengeIndex]
-    return
-
-  _viewNextChallenge: ->
-    return if @currentChallengeIndex is 0
-    @currentChallengeIndex--
-    @currentChallenge = @challenges[@currentChallengeIndex]
-    return

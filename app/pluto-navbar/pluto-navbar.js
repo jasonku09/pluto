@@ -6,11 +6,17 @@
         type: Object,
         value: [
           {
-            name: "Feed",
+            name: "Challenges",
             icon: 'home'
           }, {
             name: "Goals",
             icon: 'flag'
+          }, {
+            name: "Accounts",
+            icon: 'star-border'
+          }, {
+            name: "Settings",
+            icon: 'settings'
           }
         ]
       },
@@ -21,14 +27,14 @@
     },
     attached: function() {
       if (!this.tab) {
-        this.tab = "Feed";
+        this.tab = "Challenges";
       }
     },
     _computeIconStyle: function(item) {
       if (this.tab === item.name) {
-        return 'color:white';
+        return 'color: #5DCAD1';
       } else {
-        return 'color: #4b786a';
+        return 'color: #9c9c9c';
       }
     },
     _onTabChanged: function() {

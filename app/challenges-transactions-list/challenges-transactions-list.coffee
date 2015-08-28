@@ -93,7 +93,7 @@ Polymer
       for item in foodArray
         if item.active
           total += item.amount
-      @spent = total.toFixed(2)
+      @spent = total
     return
 
   _onDateChange: (e)->

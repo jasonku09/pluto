@@ -13,53 +13,24 @@
 
 <dom-module id="home-page">
   <style>
-    :host {
-      display: block;
-    }
-    .header{
-      font-weight:100 !important;
-      font-size: 16px !important;
-      color: black;
-    }
-    paper-header-panel > paper-toolbar{
-      background: white;
-      color: grey;
-    }
     paper-tabs /deep/ paper-ripple{
       color: rgba(0,0,0,0);
     }
+    #mainPanel{
+      height:inherit;
+    }
   </style>
   <template>
-
-    <paper-drawer-panel id="drawerPanel" drawer-width="250px" force-narrow>
-
-        <!-- Drawer -->
-        <pluto-drawer-menu drawer router="[[router]]" user="[[user]]" on-item-selected="_onMenuItemSelected"></pluto-drawer-menu>
-
-        <!-- Main Area -->
-        <div main>
-          <div id="infoBar"></div>
-          <paper-header-panel class="flex" id="mainPanel" mode="seamed">
-
-            <!-- Toolbar/Nav -->
-            <paper-toolbar tool id="toolbar">
-              <iron-icon id="menuIcon" icon="menu" paper-drawer-toggle></iron-icon>
-              <div class="flex"></div>
-              <paper-item class="header">Challenge</paper-item>
-              <div class="flex"></div>
-              <iron-icon icon=""></iron-icon>
-            </paper-toolbar>
-
-            <!-- Tab Area -->
-            <div class="fit vertical layout">
-              <wxy-router key="data">
-                <wxy-route path="/challenges"
-                           name="challenges-page"></wxy-route>
-              </wxy-router>
-            </div>
-          </paper-header-panel>
-        </div>
-      </paper-drawer-panel>
+    <!-- Main Area -->
+    <div class="vertical layout fit">
+      <div id="infoBar" style="background:white"></div>
+      <div class="flex vertical layout" style="position:relative">
+        <wxy-router key="data">
+          <wxy-route path="/challenges"
+                     name="challenges-page"></wxy-route>
+        </wxy-router>
+      </div>
+      <pluto-navbar router="[[router]]"></pluto-navbar>
     </div>
   </template>
 </dom-module>
